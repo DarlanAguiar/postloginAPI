@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { FcGoogle } from "react-icons/fc";
+/* import { FcGoogle } from "react-icons/fc";
 
 import { useNavigate } from "react-router-dom";
 
@@ -13,15 +13,51 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 
-import { AuthContexts } from "../contexts/contexts";
+import { AuthContexts } from "../contexts/contexts"; */
 
 import "./Login.css";
 
+import InputLogin from "./login/InputLogin";
+import CreateAccount from "./login/CreateAccount";
+
+/* 
 const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
-
+ */
 const Login = () => {
-  const { setAuthenticated, setUserEmail } = useContext(AuthContexts);
+  const [isRegistering, setIsRegistering] = useState(false);
+
+  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const showErrorMessage = (error) => {
+    setHasError(true);
+
+    switch (error.message) {
+      case "Firebase: Error (auth/internal-error).":
+        return setErrorMessage("Dados incompleto");
+      case "Firebase: Error (auth/missing-email).":
+        return setErrorMessage("Adicione o Email");
+      case "Firebase: Error (auth/invalid-email).":
+        return setErrorMessage("Email inválido");
+      case "Firebase: Password should be at least 6 characters (auth/weak-password).":
+        return setErrorMessage("A senha deve conter no mínimo 6 caracteres");
+      case "Firebase: Error (auth/email-already-in-use).":
+        return setErrorMessage("Email utilizado por outro usuáro");
+      case "Firebase: Error (auth/wrong-password).":
+        return setErrorMessage("Senha inválida");
+      case "Firebase: Error (auth/user-not-found).":
+        return setErrorMessage("Usuário não existe");
+      case "Senhas não conferem":
+        return setErrorMessage("Senhas não conferem");
+      default:
+        return setErrorMessage(
+          "cadastro não efetivado, confira os dados e tente novamente"
+        );
+    }
+  };
+
+  /*  const { setAuthenticated, setUserEmail } = useContext(AuthContexts);
 
   const navigate = useNavigate();
 
@@ -38,6 +74,7 @@ const Login = () => {
 
   onAuthStateChanged(auth, (usuarioFirebase) => {
     if (usuarioFirebase) {
+      console.log(usuarioFirebase);
       //caso tenha uma seção iniciada
       setUserEmail(usuarioFirebase.email);
       setAuthenticated(true);
@@ -76,33 +113,6 @@ const Login = () => {
           "cadastro não efetivado, confira os dados e tente novamente"
         );
     }
-
-    /*  if (error.message === "Firebase: Error (auth/internal-error).") {
-      setErrorMessage("Dados incompleto");
-    } else if (error.message === "Firebase: Error (auth/missing-email).") {
-      setErrorMessage("Adicione o Email");
-    } else if (error.message === "Firebase: Error (auth/invalid-email).") {
-      setErrorMessage("Email inválido");
-    } else if (
-      error.message ===
-      "Firebase: Password should be at least 6 characters (auth/weak-password)."
-    ) {
-      setErrorMessage("A senha deve conter no mínimo 6 caracteres");
-    } else if (
-      error.message === "Firebase: Error (auth/email-already-in-use)."
-    ) {
-      setErrorMessage("Email utilizado por outro usuáro");
-    } else if (error.message === "Firebase: Error (auth/wrong-password).") {
-      setErrorMessage("Senha inválida");
-    } else if (error.message === "Firebase: Error (auth/user-not-found).") {
-      setErrorMessage("Usuário não existe");
-    }else if (error.message === "Senhas não conferem") {
-      setErrorMessage("Senhas não conferem");
-    } else {
-      setErrorMessage(
-        "cadastro não efetivado, confira os dados e tente novamente"
-      );
-    } */
   };
 
   const handleSubmit = async (e) => {
@@ -147,14 +157,11 @@ const Login = () => {
     } catch (error) {
       showErrorMessage(error);
     }
-  };
+  }; */
 
   return (
-    <div
-      className="container"
-      style={{ border: `3px solid ${isRegistering ? "yellow" : "#444"} ` }}
-    >
-      <div className="divText">
+    <div>
+      {/*  <div className="divText">
         <h1 style={{ color: isRegistering ? "yellow" : "chartreuse" }}>
           {isRegistering ? "Cadastrar" : "Já possui cadastro? "}
         </h1>
@@ -248,7 +255,29 @@ const Login = () => {
         className="buttonNoRegister"
       >
         Usar o APP sem cadastro
-      </button>
+      </button> */}
+
+      {!isRegistering ? (
+        <InputLogin
+          setIsRegistering={setIsRegistering}
+          isRegistering={isRegistering}
+          hasError={hasError}
+          setHasError={setHasError}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+          showErrorMessage={showErrorMessage}
+        />
+      ) : (
+        <CreateAccount
+        setIsRegistering={setIsRegistering}
+        isRegistering={isRegistering}
+        hasError={hasError}
+        setHasError={setHasError}
+        errorMessage={errorMessage}
+        setErrorMessage={setErrorMessage}
+        showErrorMessage={showErrorMessage}
+        />
+      )}
     </div>
   );
 };

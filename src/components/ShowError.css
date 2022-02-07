@@ -1,0 +1,53 @@
+
+.containerWindowError{
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(128, 255, 0, 0.249);
+  position: fixed;
+  z-index: 5;
+}
+.containerError{
+
+
+  background-color: #333;
+  border-radius: 7px;
+  border: 1px solid rgb(128, 255, 0);
+
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  position: fixed;
+  z-index: 6;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.titleError{
+  color: chartreuse
+
+}
+
+.closeError{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+.textWork{
+  font-size: .9em;
+  margin-bottom: 10px;
+  margin-top: 5px;
+}
+
+.appOff{
+  color: yellow;
+  cursor: pointer;
+  transition: all ease .3s;
+}
+
+.appOff:hover{
+  transform: scale(1.1);
+}

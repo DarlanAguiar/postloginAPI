@@ -11,8 +11,8 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 
-//const URL = "http://localhost:3000/post";
 const URL = "/post";
+//const URL = "http://localhost:3000/post";
 
 /* export const firebaseApp = async () =>{
   
@@ -29,6 +29,8 @@ const URL = "/post";
 } */
 
 export const salvarDados = async (data, userDB) => {
+  let message = {};
+
   await fetch(URL, {
     method: "POST",
     headers: {
@@ -36,7 +38,20 @@ export const salvarDados = async (data, userDB) => {
       "Access-Control-Allow-Origin": "*",
     },
     body: JSON.stringify({ data: data, userDB: userDB }),
-  }).then((resp) => resp.json());
+  })
+    .then((resp) => resp.json())
+    .then((resp) => {
+      console.log(resp)
+      if (resp.error) {
+        message = { error: resp.error };
+      }
+    });
+  return message;
+
+  /*  .catch((error) =>  {
+        console.log(error)
+        return error});
+      //Não quer cair no error */
 };
 
 export const fetchData = async (userDB) => {
@@ -50,12 +65,22 @@ export const fetchData = async (userDB) => {
     },
   })
     .then((resp) => resp.json())
-    .then((resp) => (arrayData = resp));
+    .then((resp) => (arrayData = resp))
+    .catch((err) => {
+      arrayData = { error: "Problemas no servidor" };
+
+      //mandar uma mensagem no APP de erros
+
+      return arrayData;
+    });
 
   return arrayData;
 };
 
 export const deleteData = async (id, userDB) => {
+
+  let message = {};
+
   await fetch(URL, {
     method: "DELETE",
     headers: {
@@ -64,11 +89,20 @@ export const deleteData = async (id, userDB) => {
     },
     body: JSON.stringify({ id: id, userDB: userDB }),
   })
-    .then((resp) => resp.json())
-    .then((resp) => console.log(resp));
+  .then((resp) => resp.json())
+  .then((resp) => {
+    console.log(resp)
+    if (resp.error) {
+     message = { error: resp.error };
+    }
+  });
+return message;
 };
 
 export const updateData = async (data, userDB) => {
+
+  let message = {}
+
   await fetch(URL, {
     method: "PATCH",
     headers: {
@@ -77,6 +111,12 @@ export const updateData = async (data, userDB) => {
     },
     body: JSON.stringify({ data: data, userDB: userDB }),
   })
-    .then((resp) => resp.json())
-    .then((resp) => console.log(resp));
+  .then((resp) => resp.json())
+  .then((resp) => {
+    console.log(resp)
+    if (resp.error) {
+     message = { error: resp.error };
+    }
+  });
+return message;
 };

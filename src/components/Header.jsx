@@ -8,7 +8,7 @@ import CheckItem from "./CheckItem";
 
 import "./Header.css";
 
-const Header = ({ show, setShow, fetchPostIts }) => {
+const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [date, setDate] = useState("");
@@ -62,7 +62,11 @@ const Header = ({ show, setShow, fetchPostIts }) => {
     };
 
     if (userEmail) {
-      await salvarDados(data, userEmail);
+      const db = await salvarDados(data, userEmail);
+
+      if(db.error){
+        setShowModalError(true);
+      }
     } else {
       salvarDadosIndexED(data);
     }

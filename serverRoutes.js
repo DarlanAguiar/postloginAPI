@@ -56,7 +56,7 @@ router.get("/post/:userdb", async (req, res) => {
     res.status(200).json(arrayData);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erro interno do servidor" });
+    res.status(500).json({ error: "Erro interno do servidor (GET)" });
   }
 });
 
@@ -68,8 +68,8 @@ router.post("/post", async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.status(201).json({ message: "Iserido com sucesso" });
   } catch (err) {
+    res.status(500).json({ error: "Erro interno do servidor (POST)" });
     console.error(err);
-    res.status(500).json({ error: "Erro interno do servidor" });
   }
 });
 
@@ -79,10 +79,10 @@ router.patch("/post", async (req, res) => {
 
   try {
     await updateDoc(doc(db, userDB, id), data);
-    res.status(200).json("Atualizado com sucesso");
+    res.status(200).json({ message: "Atualizado com sucesso" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erro interno do servidor" });
+    res.status(500).json({ error: "Erro interno do servidor (UPDATE)" });
   }
 });
 
@@ -91,11 +91,16 @@ router.delete("/post", async (req, res) => {
 
   try {
     await deleteDoc(doc(db, userDB, id));
-    res.status(200).json("Deletado com sucesso");
+    res.status(200).json({ message: "Deletado com sucesso" });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Erro interno do servidor" });
+    res.status(500).json({ error: "Erro interno do servidor (DELETE)" });
   }
+});
+
+router.get("/login", (req, res) => {
+  console.log("redirecionou");
+  res.redirect("/");
 });
 
 module.exports = router;

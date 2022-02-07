@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 
 import { firebaseApp } from "./database/firebase";
 import { getAuth, signOut } from "firebase/auth";
+import ShowError from "./components/SHowError";
 const auth = getAuth(firebaseApp);
 
 function Home() {
@@ -30,6 +31,7 @@ function Home() {
   const [visibleSearch, setVisibleSearch] = useState(false);
   const [textSearch, setTextSearch] = useState("");
   const [ouvindo, setOuvindo] = useState(false);
+  const [showModalError, setShowModalError] = useState(false);
 
   const { userEmail, setAuthenticated, setUserEmail } =
     useContext(AuthContexts);
@@ -48,7 +50,14 @@ function Home() {
     //se tiver um usuário uso o firebase
     if (userEmail) {
       const dados = await fetchData(userEmail);
-      setInfoDB(dados);
+      if (dados.error) {
+        setShowModalError(true);
+      } else {
+        if (showModalError) {
+          setShowModalError(false);
+        }
+        setInfoDB(dados);
+      }
     } else {
       const dados = await fetchDataIndexED();
       setInfoDB(dados);
@@ -57,7 +66,8 @@ function Home() {
 
   const deletePost = async (id) => {
     if (userEmail) {
-      await deleteData(id, userEmail);
+      const deleted = await deleteData(id, userEmail);
+      if(deleted.error) setShowModalError(true)
     } else {
       deleteDataIndexED(id);
     }
@@ -78,7 +88,8 @@ function Home() {
     };
 
     if (userEmail) {
-      await updateData(updatedData, userEmail);
+      const update = await updateData(updatedData, userEmail);
+      if(update.error) setShowModalError(true)
     } else {
       updateDataIndexED(updatedData);
     }
@@ -129,7 +140,12 @@ function Home() {
 
   return (
     <div className="body">
-      <Header show={menu} setShow={showMenu} fetchPostIts={fetchPostIts} />
+      <Header
+        show={menu}
+        setShow={showMenu}
+        fetchPostIts={fetchPostIts}
+        setShowModalError={setShowModalError}
+      />
 
       {infoDB.map((info, id) => (
         <CardPostit
@@ -174,6 +190,8 @@ function Home() {
       <div onClick={handleLogout} className="exit">
         <ImExit />
       </div>
+
+      {showModalError && <ShowError handleLogout={handleLogout} />}
 
       <Footer />
     </div>

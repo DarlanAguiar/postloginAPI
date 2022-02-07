@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 
 
@@ -8,6 +8,11 @@ const AuthProvider = ({ children }) => {
   const [authenticated, setAuthenticated] = useState(false);
 
   const [userEmail, setUserEmail] = useState(null);
+
+  useEffect(() => {
+    console.log(authenticated)
+    console.log(userEmail)
+  }, [authenticated]);
 
   return (
     <AuthContexts.Provider
