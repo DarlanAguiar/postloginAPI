@@ -17,7 +17,7 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
   const [checkItem, setCheckItem] = useState("");
   const [listCheckItem, setListCheckItem] = useState([]);
 
-  const { userEmail } = useContext(AuthContexts);
+  const { userEmail, token } = useContext(AuthContexts);
 
   const formatDate = (date) => {
     setDateValue(date);
@@ -62,10 +62,11 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
     };
 
     if (userEmail) {
-      const db = await salvarDados(data, userEmail);
+      const addDB = await salvarDados(data, userEmail, token);
 
-      if(db.error){
+      if (addDB.error) {
         setShowModalError(true);
+        console.error(addDB.error);
       }
     } else {
       salvarDadosIndexED(data);

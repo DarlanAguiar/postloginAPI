@@ -33,14 +33,14 @@ function Home() {
   const [ouvindo, setOuvindo] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
 
-  const { userEmail, setAuthenticated, setUserEmail } =
+  const { userEmail, setAuthenticated, setUserEmail, showInfoIndexED, token } =
     useContext(AuthContexts);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchPostIts();
-  }, []);
+  }, [userEmail]);
 
   const showMenu = () => {
     SetMenu(!menu);
@@ -49,25 +49,29 @@ function Home() {
   async function fetchPostIts() {
     //se tiver um usuário uso o firebase
     if (userEmail) {
-      const dados = await fetchData(userEmail);
-      if (dados.error) {
+      const dataDB = await fetchData(userEmail, token);
+      if (dataDB.error) {
         setShowModalError(true);
+        console.error(dataDB.error);
       } else {
         if (showModalError) {
           setShowModalError(false);
         }
-        setInfoDB(dados);
+        setInfoDB(dataDB);
       }
     } else {
-      const dados = await fetchDataIndexED();
-      setInfoDB(dados);
+      const dataDB = await fetchDataIndexED();
+      if (showInfoIndexED) setInfoDB(dataDB);
     }
   }
 
   const deletePost = async (id) => {
     if (userEmail) {
-      const deleted = await deleteData(id, userEmail);
-      if(deleted.error) setShowModalError(true)
+      const deleted = await deleteData(id, userEmail, token);
+      if (deleted.error) {
+        setShowModalError(true);
+        console.error(deleted.error);
+      }
     } else {
       deleteDataIndexED(id);
     }
@@ -88,8 +92,11 @@ function Home() {
     };
 
     if (userEmail) {
-      const update = await updateData(updatedData, userEmail);
-      if(update.error) setShowModalError(true)
+      const update = await updateData(updatedData, userEmail, token);
+      if (update.error) {
+        setShowModalError(true);
+        console.error(update.error);
+      }
     } else {
       updateDataIndexED(updatedData);
     }
@@ -133,7 +140,7 @@ function Home() {
     setAuthenticated(false);
     setUserEmail(null);
 
-    const exti = await signOut(auth);
+    await signOut(auth);
 
     navigate("/login");
   };
@@ -188,7 +195,7 @@ function Home() {
         />
       </div>
       <div onClick={handleLogout} className="exit">
-        <ImExit />
+        <ImExit style={{fontSize: "22px"}} />
       </div>
 
       {showModalError && <ShowError handleLogout={handleLogout} />}

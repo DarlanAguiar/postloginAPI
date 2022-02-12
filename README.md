@@ -1,2 +1,2 @@
 # postloginAPI
- post com API
+ postIT (Lista de tarefas) com API REST e login.

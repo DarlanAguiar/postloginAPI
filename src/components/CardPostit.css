@@ -28,19 +28,28 @@
   bottom: 3px;
 }
 
-.OneMoreCheck{
- 
-  font-size: .85em;
+.OneMoreCheck {
+  font-size: 0.85em;
   color: #666;
   margin: 3px;
   border-radius: 5px;
   padding: 3px 3px 3px 6px;
-  transition: all ease .3s;
+  transition: all ease 0.3s;
 }
 
-.OneMoreCheck:hover{
+.OneMoreCheck:hover {
   color: white;
   background-color: #444;
- 
 }
 
+@media screen and (min-width: 900px) {
+  .card {
+    width: 32%;
+  }
+}
+
+@media screen and (min-width: 1400px) {
+  .card {
+    width: 23%;
+  }
+}

@@ -9,7 +9,6 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
-  onAuthStateChanged,
 } from "firebase/auth";
 
 import { AuthContexts } from "../../contexts/contexts";
@@ -28,7 +27,7 @@ const InputLogin = ({
   errorMessage,
   setErrorMessage,
 }) => {
-  const { setAuthenticated, setUserEmail } = useContext(AuthContexts);
+  const { setAuthenticated, setUserEmail, setshowInfoIndexED } = useContext(AuthContexts);
 
   const navigate = useNavigate();
 
@@ -36,7 +35,7 @@ const InputLogin = ({
 
   const [password, setPassword] = useState("");
 
-  onAuthStateChanged(auth, (usuarioFirebase) => {
+  /* onAuthStateChanged(auth, (usuarioFirebase) => {
     if (usuarioFirebase) {
       console.log(usuarioFirebase);
       //caso tenha uma seção iniciada
@@ -46,11 +45,11 @@ const InputLogin = ({
       navigate("/");
     } else {
       //caso que nao tenha um seção iniciada
-      setUserEmail(null);
+      setUserEmail(false);
 
       console.log("não tem usuario global");
     }
-  });
+  }); */
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +58,12 @@ const InputLogin = ({
 
     try {
       const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log("***entrando" + email);
+      const userEmail = user.user.email;
+      setUserEmail(userEmail);
+      setAuthenticated(true);
+
+      navigate("/");
+
     } catch (error) {
       showErrorMessage(error);
     }
@@ -70,10 +74,16 @@ const InputLogin = ({
       await signInWithPopup(auth, googleProvider).then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         // informaçoes do usuario.
-        const token = credential.accessToken;
-        const user = result.user;
+        //const token = credential.accessToken;
+        console.log(credential)
+        const userEmail = result.user.email;
+        setUserEmail(userEmail);
+        setAuthenticated(true);
+  
+        navigate("/");
       });
     } catch (error) {
+      console.log(error)
       showErrorMessage(error);
     }
   };
@@ -135,6 +145,7 @@ const InputLogin = ({
       <button
         onClick={() => {
           setAuthenticated(true);
+          setshowInfoIndexED(true)
           navigate("/");
         }}
         className="buttonNoRegister"

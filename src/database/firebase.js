@@ -14,21 +14,7 @@ export const firebaseApp = initializeApp(firebaseConfig);
 const URL = "/post";
 //const URL = "http://localhost:3000/post";
 
-/* export const firebaseApp = async () =>{
-  
-  await fetch(`${URL}/config`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  })
-  .then((resp) => resp.json())
-  .then((resp) => initializeApp(resp));
-
-} */
-
-export const salvarDados = async (data, userDB) => {
+export const salvarDados = async (data, userDB, token) => {
   let message = {};
 
   await fetch(URL, {
@@ -37,11 +23,11 @@ export const salvarDados = async (data, userDB) => {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
-    body: JSON.stringify({ data: data, userDB: userDB }),
+    body: JSON.stringify({ data: data, userDB: userDB, token: token }),
   })
     .then((resp) => resp.json())
     .then((resp) => {
-      console.log(resp)
+      console.log(resp);
       if (resp.error) {
         message = { error: resp.error };
       }
@@ -54,20 +40,32 @@ export const salvarDados = async (data, userDB) => {
       //Não quer cair no error */
 };
 
-export const fetchData = async (userDB) => {
+export const fetchData = async (userDB, token) => {
   let arrayData = [];
 
-  await fetch(`${URL}/${userDB}`, {
+  await fetch(`${URL}/${userDB}/${token}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
   })
-    .then((resp) => resp.json())
+    .then((resp) => {
+      console.log("Essa é a resposta:", resp);
+      const parsedResp = resp.json();
+      console.log("Essa e o parsedResp ", parsedResp);
+      return parsedResp;
+    })
     .then((resp) => (arrayData = resp))
     .catch((err) => {
+      console.log("Inicio do catch");
+
       arrayData = { error: "Problemas no servidor" };
+
+      console.log("Antes da chamada");
+
+      console.log(err);
+      console.log("Depois da chamada");
 
       //mandar uma mensagem no APP de erros
 
@@ -77,8 +75,7 @@ export const fetchData = async (userDB) => {
   return arrayData;
 };
 
-export const deleteData = async (id, userDB) => {
-
+export const deleteData = async (id, userDB, token) => {
   let message = {};
 
   await fetch(URL, {
@@ -87,21 +84,20 @@ export const deleteData = async (id, userDB) => {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
-    body: JSON.stringify({ id: id, userDB: userDB }),
+    body: JSON.stringify({ id: id, userDB: userDB, token: token }),
   })
-  .then((resp) => resp.json())
-  .then((resp) => {
-    console.log(resp)
-    if (resp.error) {
-     message = { error: resp.error };
-    }
-  });
-return message;
+    .then((resp) => resp.json())
+    .then((resp) => {
+      console.log(resp);
+      if (resp.error) {
+        message = { error: resp.error };
+      }
+    });
+  return message;
 };
 
-export const updateData = async (data, userDB) => {
-
-  let message = {}
+export const updateData = async (data, userDB, token) => {
+  let message = {};
 
   await fetch(URL, {
     method: "PATCH",
@@ -109,14 +105,13 @@ export const updateData = async (data, userDB) => {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
-    body: JSON.stringify({ data: data, userDB: userDB }),
+    body: JSON.stringify({ data: data, userDB: userDB, token: token }),
   })
-  .then((resp) => resp.json())
-  .then((resp) => {
-    console.log(resp)
-    if (resp.error) {
-     message = { error: resp.error };
-    }
-  });
-return message;
+    .then((resp) => resp.json())
+    .then((resp) => {
+      if (resp.error) {
+        message = { error: resp.error };
+      }
+    });
+  return message;
 };

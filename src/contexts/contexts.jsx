@@ -1,6 +1,4 @@
-import React, { createContext, useState, useEffect } from "react";
-
-
+import React, { createContext, useState } from "react";
 
 export const AuthContexts = createContext();
 
@@ -9,14 +7,22 @@ const AuthProvider = ({ children }) => {
 
   const [userEmail, setUserEmail] = useState(null);
 
-  useEffect(() => {
-    console.log(authenticated)
-    console.log(userEmail)
-  }, [authenticated]);
+  const [showInfoIndexED, setshowInfoIndexED] = useState(false);
+
+  const [token, setToken] = useState("");
 
   return (
     <AuthContexts.Provider
-      value={{ authenticated, setAuthenticated, userEmail, setUserEmail }}
+      value={{
+        authenticated,
+        setAuthenticated,
+        userEmail,
+        setUserEmail,
+        showInfoIndexED,
+        setshowInfoIndexED,
+        setToken,
+        token,
+      }}
     >
       {children}
     </AuthContexts.Provider>

@@ -53,7 +53,7 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
       return;
     }
 
-    if (moment(date, "DD-MM-YYYY").isValid()) {
+    if (moment(date, "DD-MM-YYYY").isValid()  && /\d?\d-\d?\d-\d{2}?\d\d/.test(date)) {
       info.date = date;
       setInvalidDate(false);
       editPost(info);
@@ -61,18 +61,6 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
       setInvalidDate(true);
     }
 
-    /* let expressao = new RegExp(
-      /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/,
-      "g"
-    );
-
-    if (expressao.test(date)) {
-      info.date = date;
-      setInvalidDate(false);
-      editPost(info);
-    } else {
-      setInvalidDate(true);
-    } */
   };
 
   return (
@@ -82,6 +70,7 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
         deletePost={deletePost}
         editPost={editPost}
         dataEdit={info}
+        setSearchMatch={setSearchMatch}
       />
       <CheckBoxList data={info} editPost={editPost} />
       <p

@@ -3,11 +3,10 @@ import { BsTrash } from "react-icons/bs";
 
 import "./Texts.css";
 
-const Texts = ({ data, deletePost, editPost, dataEdit }) => {
+const Texts = ({ data, deletePost, editPost, dataEdit, setSearchMatch }) => {
   let dados = dataEdit;
 
   return (
-   
     <div className="texts">
       <div className="cabecalho">
         <h4
@@ -21,7 +20,13 @@ const Texts = ({ data, deletePost, editPost, dataEdit }) => {
         >
           {data.title.toUpperCase()}
         </h4>
-        <button className="buttonX" onClick={() => deletePost(data.id)}>
+        <button
+          className="buttonX"
+          onClick={() => {
+            deletePost(data.id);
+            setSearchMatch(false);
+          }}
+        >
           <BsTrash fontSize={18} color="chartreuse" />
         </button>
       </div>

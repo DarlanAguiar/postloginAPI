@@ -6,6 +6,7 @@
   margin: 3px;
   border-radius: 5px;
   padding: 3px;
+  transition: .3s;
 }
 
 .button_apagar_check {

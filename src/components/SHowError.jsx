@@ -12,7 +12,7 @@ const ShowError = ({ handleLogout }) => {
           <FaRegWindowClose style={{ fontSize: "22px" }} />
         </p>
         <h1 className="titleError">ERRO</h1>
-        <h2>Problemas no servidor</h2>
+        <h2>falha no servidor</h2>
         <FaTools style={{ fontSize: "50px", color: "chartreuse" }} />
         <p className="textWork">
           Estamos trabalhando para voltar o mais breve possível

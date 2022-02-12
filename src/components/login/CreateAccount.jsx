@@ -3,17 +3,13 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { firebaseApp } from "../../database/firebase";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-} from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 import { AuthContexts } from "../../contexts/contexts";
 
 import "./CreateAccount.css";
 
 const auth = getAuth(firebaseApp);
-
 
 const CreateAccount = ({
   setIsRegistering,
@@ -24,7 +20,8 @@ const CreateAccount = ({
   errorMessage,
   setErrorMessage,
 }) => {
-  const { setAuthenticated } = useContext(AuthContexts);
+  const { setAuthenticated, setshowInfoIndexED } =
+    useContext(AuthContexts);
 
   const navigate = useNavigate();
 
@@ -41,7 +38,7 @@ const CreateAccount = ({
 
     if (password === passwordConfirm) {
       try {
-        const user = await createUserWithEmailAndPassword(
+        await createUserWithEmailAndPassword(
           auth,
           email,
           password
@@ -118,6 +115,7 @@ const CreateAccount = ({
       <button
         onClick={() => {
           setAuthenticated(true);
+          setshowInfoIndexED(true);
           navigate("/");
         }}
         className="buttonNoRegister"
