@@ -33,6 +33,8 @@ if(localStorage.contPostIt){
   let visitsNumber = Number(localStorage.contPostIt) + 1
   localStorage.contPostIt = visitsNumber
   buttonCounterAskAgain = visitsNumber
+}else{
+  localStorage.setItem("contPostIt", 11)
 }
 let numberMessageOf = 0
 function Home() {
@@ -69,7 +71,7 @@ function Home() {
 
   const clickedDoNotAskAgain = () => {
     setShowScrapBookOffline(false)
-    localStorage.setItem("contPostIt", "0")
+    localStorage.contPostIt = 0
   }
 
 
@@ -83,7 +85,7 @@ function Home() {
     //se tiver um usuário uso o firebase
     if (userEmail) {
       const dataDB = await fetchData(userEmail, token);
-      if (!clicouFechar && buttonCounterAskAgain > 10 ) {
+      if (!clicouFechar) {
         const dataOff = await checkDataOffline();
         //setNumberMessagesOffline(dataOff.length);
         numberMessageOf = (dataOff.length)
