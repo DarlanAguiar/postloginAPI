@@ -11,10 +11,11 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 
-const URL = "/post";
-//const URL = "http://localhost:3000/post";
+//const URL = "/post";
+const URL = "http://localhost:3000/post";
 
 export const salvarDados = async (data, userDB, token) => {
+  console.log(userDB, token);
   let message = {};
 
   await fetch(URL, {
@@ -51,9 +52,8 @@ export const fetchData = async (userDB, token) => {
     },
   })
     .then((resp) => {
-      console.log("Essa é a resposta:", resp);
       const parsedResp = resp.json();
-      console.log("Essa e o parsedResp ", parsedResp);
+
       return parsedResp;
     })
     .then((resp) => (arrayData = resp))

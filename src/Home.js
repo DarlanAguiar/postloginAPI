@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { deleteData, fetchData, updateData } from "./database/firebase";
 import {
+  checkDataOffline,
   deleteDataIndexED,
   fetchDataIndexED,
   updateDataIndexED,
@@ -23,8 +24,17 @@ import { useNavigate } from "react-router-dom";
 import { firebaseApp } from "./database/firebase";
 import { getAuth, signOut } from "firebase/auth";
 import ShowError from "./components/SHowError";
+import ScrapBookOffline from "./components/scrapbookOffline";
 const auth = getAuth(firebaseApp);
 
+
+let buttonCounterAskAgain;
+if(localStorage.contPostIt){
+  let visitsNumber = Number(localStorage.contPostIt) + 1
+  localStorage.contPostIt = visitsNumber
+  buttonCounterAskAgain = visitsNumber
+}
+let numberMessageOf = 0
 function Home() {
   const [menu, SetMenu] = useState(false);
   const [infoDB, setInfoDB] = useState([]);
@@ -32,6 +42,15 @@ function Home() {
   const [textSearch, setTextSearch] = useState("");
   const [ouvindo, setOuvindo] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
+
+  const [showScrapBookOffline, setShowScrapBookOffline] = useState(false);
+  //const [numberMessagesOffline, setNumberMessagesOffline] = useState(0);
+  const [clicouFechar, setClicouFechar] = useState(false);
+
+  const notShowMessageInSection = () => {
+    setClicouFechar(true);
+    setShowScrapBookOffline(false);
+  };
 
   const { userEmail, setAuthenticated, setUserEmail, showInfoIndexED, token } =
     useContext(AuthContexts);
@@ -46,10 +65,36 @@ function Home() {
     SetMenu(!menu);
   };
 
+
+
+  const clickedDoNotAskAgain = () => {
+    setShowScrapBookOffline(false)
+    localStorage.setItem("contPostIt", "0")
+  }
+
+
+  const importMessagesIndexedBD = async () => {
+    setShowScrapBookOffline(false)
+    await checkDataOffline(userEmail, token)
+    fetchPostIts()
+  }
+ 
   async function fetchPostIts() {
     //se tiver um usuário uso o firebase
     if (userEmail) {
       const dataDB = await fetchData(userEmail, token);
+      if (!clicouFechar && buttonCounterAskAgain > 10 ) {
+        const dataOff = await checkDataOffline();
+        //setNumberMessagesOffline(dataOff.length);
+        numberMessageOf = (dataOff.length)
+        setTimeout(() => {
+          if (dataOff.length > 0) {
+            setShowScrapBookOffline(true);
+          }
+        }, 3000);
+        
+      }
+
       if (dataDB.error) {
         setShowModalError(true);
         console.error(dataDB.error);
@@ -154,6 +199,15 @@ function Home() {
         setShowModalError={setShowModalError}
       />
 
+      {showScrapBookOffline && (
+        <ScrapBookOffline
+          numberMessagesOffline={numberMessageOf}
+          notShowMessageInSection={notShowMessageInSection}
+          importMessagesIndexedBD={importMessagesIndexedBD}
+          clickedDoNotAskAgain={clickedDoNotAskAgain}
+        />
+      )}
+
       {infoDB.map((info, id) => (
         <CardPostit
           info={info}
@@ -195,7 +249,7 @@ function Home() {
         />
       </div>
       <div onClick={handleLogout} className="exit">
-        <ImExit style={{fontSize: "22px"}} />
+        <ImExit style={{ fontSize: "22px" }} />
       </div>
 
       {showModalError && <ShowError handleLogout={handleLogout} />}

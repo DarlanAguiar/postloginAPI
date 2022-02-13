@@ -75,7 +75,7 @@ const InputLogin = ({
         const credential = GoogleAuthProvider.credentialFromResult(result);
         // informaçoes do usuario.
         //const token = credential.accessToken;
-        console.log(credential)
+        //console.log(credential)
         const userEmail = result.user.email;
         setUserEmail(userEmail);
         setAuthenticated(true);

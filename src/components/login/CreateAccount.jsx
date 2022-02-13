@@ -20,8 +20,7 @@ const CreateAccount = ({
   errorMessage,
   setErrorMessage,
 }) => {
-  const { setAuthenticated, setshowInfoIndexED } =
-    useContext(AuthContexts);
+  const { setAuthenticated, setshowInfoIndexED } = useContext(AuthContexts);
 
   const navigate = useNavigate();
 
@@ -38,11 +37,7 @@ const CreateAccount = ({
 
     if (password === passwordConfirm) {
       try {
-        await createUserWithEmailAndPassword(
-          auth,
-          email,
-          password
-        );
+        await createUserWithEmailAndPassword(auth, email, password);
       } catch (error) {
         showErrorMessage(error);
       }
