@@ -11,8 +11,8 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 
-//const URL = "/post";
-const URL = "http://localhost:3000/post";
+const URL = "/post";
+//const URL = "http://localhost:3000/post";
 
 export const salvarDados = async (data, userDB, token) => {
   console.log(userDB, token);
