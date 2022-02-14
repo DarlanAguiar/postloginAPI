@@ -46,11 +46,11 @@ function Home() {
   const [showModalError, setShowModalError] = useState(false);
 
   const [showScrapBookOffline, setShowScrapBookOffline] = useState(false);
-  //const [numberMessagesOffline, setNumberMessagesOffline] = useState(0);
-  const [clicouFechar, setClicouFechar] = useState(false);
+
+  const [clickedCloseImportPostIt, setClickedCloseImportPostIt] = useState(false);
 
   const notShowMessageInSection = () => {
-    setClicouFechar(true);
+    setClickedCloseImportPostIt(true);
     setShowScrapBookOffline(false);
   };
 
@@ -67,7 +67,7 @@ function Home() {
     SetMenu(!menu);
   };
 
-
+  console.log(localStorage.contPostIt);
 
   const clickedDoNotAskAgain = () => {
     setShowScrapBookOffline(false)
@@ -85,7 +85,7 @@ function Home() {
     //se tiver um usuário uso o firebase
     if (userEmail) {
       const dataDB = await fetchData(userEmail, token);
-      if (!clicouFechar) {
+      if (!clickedCloseImportPostIt && Number(localStorage.contPostIt) > 10) {
         const dataOff = await checkDataOffline();
         //setNumberMessagesOffline(dataOff.length);
         numberMessageOf = (dataOff.length)
@@ -93,7 +93,7 @@ function Home() {
           if (dataOff.length > 0) {
             setShowScrapBookOffline(true);
           }
-        }, 3000);
+        }, 30);
         
       }
 

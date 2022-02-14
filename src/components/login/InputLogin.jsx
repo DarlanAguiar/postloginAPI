@@ -14,20 +14,14 @@ import {
 import { AuthContexts } from "../../contexts/contexts";
 
 import "./InputLogin.css";
+import ErrorsLogin from "./ErrorsLogin";
 
 const auth = getAuth(firebaseApp);
 const googleProvider = new GoogleAuthProvider();
 
-const InputLogin = ({
-  setIsRegistering,
-  isRegistering,
-  showErrorMessage,
-  hasError,
-  setHasError,
-  errorMessage,
-  setErrorMessage,
-}) => {
-  const { setAuthenticated, setUserEmail, setshowInfoIndexED } = useContext(AuthContexts);
+const InputLogin = ({ setIsRegistering, isRegistering }) => {
+  const { setAuthenticated, setUserEmail, setshowInfoIndexED } =
+    useContext(AuthContexts);
 
   const navigate = useNavigate();
 
@@ -35,21 +29,35 @@ const InputLogin = ({
 
   const [password, setPassword] = useState("");
 
-  /* onAuthStateChanged(auth, (usuarioFirebase) => {
-    if (usuarioFirebase) {
-      console.log(usuarioFirebase);
-      //caso tenha uma seção iniciada
-      setUserEmail(usuarioFirebase.email);
-      setAuthenticated(true);
+  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
-      navigate("/");
-    } else {
-      //caso que nao tenha um seção iniciada
-      setUserEmail(false);
+  const showErrorMessage = (error) => {
+    setHasError(true);
 
-      console.log("não tem usuario global");
+    switch (error.message) {
+      case "Firebase: Error (auth/internal-error).":
+        return setErrorMessage("Dados incompleto");
+      case "Firebase: Error (auth/missing-email).":
+        return setErrorMessage("Adicione o Email");
+      case "Firebase: Error (auth/invalid-email).":
+        return setErrorMessage("Email inválido");
+      case "Firebase: Password should be at least 6 characters (auth/weak-password).":
+        return setErrorMessage("A senha deve conter no mínimo 6 caracteres");
+      case "Firebase: Error (auth/email-already-in-use).":
+        return setErrorMessage("Email utilizado por outro usuáro");
+      case "Firebase: Error (auth/wrong-password).":
+        return setErrorMessage("Senha inválida");
+      case "Firebase: Error (auth/user-not-found).":
+        return setErrorMessage("Usuário não existe");
+      case "Senhas não conferem":
+        return setErrorMessage("Senhas não conferem");
+      default:
+        return setErrorMessage(
+          "cadastro não efetivado, confira os dados e tente novamente"
+        );
     }
-  }); */
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +71,6 @@ const InputLogin = ({
       setAuthenticated(true);
 
       navigate("/");
-
     } catch (error) {
       showErrorMessage(error);
     }
@@ -79,11 +86,11 @@ const InputLogin = ({
         const userEmail = result.user.email;
         setUserEmail(userEmail);
         setAuthenticated(true);
-  
+
         navigate("/");
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       showErrorMessage(error);
     }
   };
@@ -119,7 +126,7 @@ const InputLogin = ({
           />
         </div>
 
-        {hasError && <p className="errorTextLogin">{errorMessage}</p>}
+        {hasError && <ErrorsLogin errorMessage={errorMessage} />}
 
         <button className="logar" type="submit">
           Entrar
@@ -145,7 +152,7 @@ const InputLogin = ({
       <button
         onClick={() => {
           setAuthenticated(true);
-          setshowInfoIndexED(true)
+          setshowInfoIndexED(true);
           navigate("/");
         }}
         className="buttonNoRegister"

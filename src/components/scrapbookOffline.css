@@ -1,5 +1,4 @@
-.scrapbookOfflineContainer{
-
+.scrapbookOfflineContainer {
   background-color: #333;
   border-radius: 7px;
   border: 1px solid rgb(128, 255, 0);
@@ -16,30 +15,36 @@
   transform: translate(-50%, -50%);
 }
 
-.closeScrapbookOffline{
+.closeScrapbookOffline {
   position: absolute;
   right: 8px;
   top: 8px;
 }
 
-.scrapbookofflineParagraph{
+.scrapbookofflineParagraph {
   margin-bottom: 20px;
 }
 
 .scrapbookOfflineContainer .buttonNegative {
   padding: 5px;
-  
+  border-radius: 0;
 }
 
-.buttonYes{
- 
+.buttonNoAsk {
+  padding: 5px;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-bottom: 2px solid darkred;
+}
+.buttonYes {
+  border-bottom-left-radius: 8px;
+  border-top-left-radius: 8px;
   padding: 5px 10px;
-
+  border-bottom: 2px solid chartreuse;
 }
-
 
 @media screen and (max-width: 600px) {
-  .scrapbookOfflineContainer{
+  .scrapbookOfflineContainer {
     width: 97%;
   }
 }

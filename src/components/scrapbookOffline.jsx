@@ -35,10 +35,7 @@ const ScrapBookOffline = ({
         >
           Agora não
         </button>
-        <button
-          className="buttonNegative"
-          onClick={() => clickedDoNotAskAgain()}
-        >
+        <button className="buttonNoAsk" onClick={() => clickedDoNotAskAgain()}>
           Não perguntar novamente
         </button>
       </div>

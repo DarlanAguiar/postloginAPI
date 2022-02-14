@@ -8,27 +8,48 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { AuthContexts } from "../../contexts/contexts";
 
 import "./CreateAccount.css";
+import ErrorsLogin from "./ErrorsLogin";
 
 const auth = getAuth(firebaseApp);
 
-const CreateAccount = ({
-  setIsRegistering,
-  isRegistering,
-  showErrorMessage,
-  hasError,
-  setHasError,
-  errorMessage,
-  setErrorMessage,
-}) => {
+const CreateAccount = ({ setIsRegistering, isRegistering }) => {
   const { setAuthenticated, setshowInfoIndexED } = useContext(AuthContexts);
 
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
-
   const [passwordConfirm, setPasswordConfirm] = useState("");
+
+  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const showErrorMessage = (error) => {
+    setHasError(true);
+
+    switch (error.message) {
+      case "Firebase: Error (auth/internal-error).":
+        return setErrorMessage("Dados incompleto");
+      case "Firebase: Error (auth/missing-email).":
+        return setErrorMessage("Adicione o Email");
+      case "Firebase: Error (auth/invalid-email).":
+        return setErrorMessage("Email inválido");
+      case "Firebase: Password should be at least 6 characters (auth/weak-password).":
+        return setErrorMessage("A senha deve conter no mínimo 6 caracteres");
+      case "Firebase: Error (auth/email-already-in-use).":
+        return setErrorMessage("Email utilizado por outro usuáro");
+      case "Firebase: Error (auth/wrong-password).":
+        return setErrorMessage("Senha inválida");
+      case "Firebase: Error (auth/user-not-found).":
+        return setErrorMessage("Usuário não existe");
+      case "Senhas não conferem":
+        return setErrorMessage("Senhas não conferem");
+      default:
+        return setErrorMessage(
+          "cadastro não efetivado, confira os dados e tente novamente"
+        );
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -90,7 +111,8 @@ const CreateAccount = ({
           />
         </div>
 
-        {hasError && <p className="errorText">{errorMessage}</p>}
+       
+        {hasError && <ErrorsLogin errorMessage={errorMessage} />}
 
         <button className="Cadastrar" type="submit">
           Cadastrar

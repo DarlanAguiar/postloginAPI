@@ -1,0 +1,9 @@
+.errorTextCreateAccount{
+  font-weight: bold;
+  text-align: center;
+  font-size: .8rem;
+  margin-top: -5px;
+  margin-bottom: 5px;
+  color: rgb(250, 0, 0);
+  
+}

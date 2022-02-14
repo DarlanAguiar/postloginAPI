@@ -35,10 +35,7 @@ export const salvarDados = async (data, userDB, token) => {
     });
   return message;
 
-  /*  .catch((error) =>  {
-        console.log(error)
-        return error});
-      //Não quer cair no error */
+  
 };
 
 export const fetchData = async (userDB, token) => {
