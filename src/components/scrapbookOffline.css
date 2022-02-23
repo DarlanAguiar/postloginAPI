@@ -1,7 +1,7 @@
 .scrapbookOfflineContainer {
-  background-color: #333;
+  background-color: var(--colorBackgroundCard);
   border-radius: 7px;
-  border: 1px solid rgb(128, 255, 0);
+  border: 1px solid var(--colorFontPrimary);
 
   padding: 30px 20px 20px 20px;
   display: flex;
@@ -40,7 +40,7 @@
   border-bottom-left-radius: 8px;
   border-top-left-radius: 8px;
   padding: 5px 10px;
-  border-bottom: 2px solid chartreuse;
+  border-bottom: 2px solid var(--colorFontPrimary);
 }
 
 @media screen and (max-width: 600px) {

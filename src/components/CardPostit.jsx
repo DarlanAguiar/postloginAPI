@@ -22,7 +22,7 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
       editPost(dados);
 
       setcheckText("Adicionar...");
-    }else{
+    } else {
       setcheckText("Adicionar...");
     }
   };
@@ -50,17 +50,21 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
   const validateDate = (date) => {
     if (date.length < 1) {
       setInvalidDate(false);
+      info.date = ""
+      editPost(info);
       return;
     }
 
-    if (moment(date, "DD-MM-YYYY").isValid()  && /\d?\d-\d?\d-\d{2}?\d\d/.test(date)) {
+    if (
+      moment(date, "DD-MM-YYYY").isValid() &&
+      /\d\d-\d\d-\d{4}/.test(date)
+    ) {
       info.date = date;
       setInvalidDate(false);
       editPost(info);
     } else {
       setInvalidDate(true);
     }
-
   };
 
   return (
@@ -79,7 +83,6 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
         className="OneMoreCheck"
         onFocus={exchangeText}
         onBlur={(e) => addNewRow(e.target.textContent)}
-        
       >
         {checkText}
       </p>
@@ -87,7 +90,7 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
         className="date"
         contentEditable
         suppressContentEditableWarning={true}
-        style={{ color: invalidDate ? "chartreuse" : "#fff" }}
+        style={{ color: invalidDate ? "var(--colorFontPrimary)" : "" }}
         onBlur={(e) => {
           validateDate(e.target.textContent);
         }}

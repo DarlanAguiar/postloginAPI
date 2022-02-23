@@ -10,7 +10,7 @@ const Texts = ({ data, deletePost, editPost, dataEdit, setSearchMatch }) => {
     <div className="texts">
       <div className="cabecalho">
         <h4
-          className={"title"}
+          className={"titleTexts"}
           onBlur={(e) => {
             dados.title = e.target.textContent;
             editPost(dados);
@@ -27,7 +27,7 @@ const Texts = ({ data, deletePost, editPost, dataEdit, setSearchMatch }) => {
             setSearchMatch(false);
           }}
         >
-          <BsTrash fontSize={18} color="chartreuse" />
+          <BsTrash fontSize={18} color="var(--colorFontPrimary)" />
         </button>
       </div>
       <p

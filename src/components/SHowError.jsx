@@ -9,11 +9,11 @@ const ShowError = ({ handleLogout }) => {
     <div className="containerWindowError">
       <div className="containerError">
         <p className="closeError" onClick={() => handleLogout()}>
-          <FaRegWindowClose style={{ fontSize: "22px" }} />
+          <FaRegWindowClose style={{ fontSize: "22px", color: "var(--colorFontPrimary)" }} />
         </p>
         <h1 className="titleError">ERRO</h1>
         <h2>falha no servidor</h2>
-        <FaTools style={{ fontSize: "50px", color: "chartreuse" }} />
+        <FaTools style={{ fontSize: "50px", color: "var(--colorFontPrimary)" }} />
         <p className="textWork">
           Estamos trabalhando para voltar o mais breve possível
         </p>

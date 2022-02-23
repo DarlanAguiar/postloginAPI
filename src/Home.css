@@ -1,6 +1,6 @@
 .botao-adicionar {
-  background-image: radial-gradient(rgb(52, 214, 2), rgb(38, 87, 71));
-  color: white;
+  background-image: radial-gradient(var(--colorFontPrimary), var(--colorBackgroundCard));
+  color: var(--colorFontSecondary);
   font-weight: bolder;
   text-shadow: 0px 0px 3px black;
   border-radius: 50%;
@@ -19,6 +19,7 @@
   flex-wrap: wrap;
   justify-content: space-evenly;
   row-gap: 10px;
+  
 }
 
 .containerSearch {
@@ -43,7 +44,7 @@
 
 .containerSearch .lupa {
   margin-left: 7px;
-  background-color: #333;
+  background-color: var(--colorBackgroundCard);
   padding: 5px;
   border-radius: 5px;
 }
@@ -55,9 +56,18 @@
   border-radius: 10px;
 }
 
-.exit {
+.homeBottonSettings {
+  position: fixed;
+  bottom: 19px;
+  right: 50px;
+  font-size: 26px;
+  color: var(--colorFontSecondary);
+}
+
+.homeButtonExit {
   position: fixed;
   bottom: 19px;
   right: 10px;
-  
+  font-size: 22px;
+  color: var(--colorFontSecondary);
 }

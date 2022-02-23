@@ -1,7 +1,7 @@
 .card {
   box-sizing: border-box;
   width: 47%;
-  background-color: #333;
+  background-color: var(--colorBackgroundCard);
   padding: 5px;
   border-radius: 8px;
   min-height: 200px;
@@ -15,7 +15,7 @@
 
 .validDate {
   text-align: center;
-  color: chartreuse;
+  color: var(--colorFontPrimary);
   font-size: 0.5em;
   margin-top: -8px;
   padding-bottom: 9px;
@@ -30,7 +30,7 @@
 
 .OneMoreCheck {
   font-size: 0.85em;
-  color: #666;
+  color: var(--colorAddMoreCheck);
   margin: 3px;
   border-radius: 5px;
   padding: 3px 3px 3px 6px;
@@ -39,7 +39,7 @@
 
 .OneMoreCheck:hover {
   color: white;
-  background-color: #444;
+  background-color: var(--colorBackgroundLine);
 }
 
 @media screen and (min-width: 900px) {

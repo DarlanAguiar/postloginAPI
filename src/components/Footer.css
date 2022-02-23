@@ -4,11 +4,11 @@
   right: 6px;
 }
 .textoRodape {
-  color: chartreuse;
+  color: var(--colorFontPrimary);
   font-size: .8em;
 }
 svg {
-  color: #fff;
+  color: var(--colorFontSecondary);
 }
 a {
   text-decoration: none;

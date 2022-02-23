@@ -16,7 +16,7 @@ const CheckBoxItem = ({ dataItem, data, indice, editPost }) => {
     dados.checkList = deletedRow;
     editPost(dados);
   };
-  
+
   useEffect(() => {
     setClickOnDelete(false);
     setcheckedItem(dataItem.check);
@@ -26,7 +26,7 @@ const CheckBoxItem = ({ dataItem, data, indice, editPost }) => {
     <div
       className={"card_div_checar_item"}
       style={{
-        borderLeft: dataItem.check ? "" : "2px solid chartreuse",
+        borderLeft: dataItem.check ? "" : "2px solid var(--colorFontPrimary)",
         opacity: clickOnDelete ? "0" : "100",
       }}
     >
@@ -38,7 +38,7 @@ const CheckBoxItem = ({ dataItem, data, indice, editPost }) => {
           dados.checkList[indice].text = e.target.textContent;
           editPost(dados);
         }}
-        style={{ color: dataItem.check ? "#777" : "#fff" }}
+        style={{ color: dataItem.check ? "var(--colorFontDisabled)" : "" }}
       >
         {dataItem.text}
       </p>
@@ -53,7 +53,11 @@ const CheckBoxItem = ({ dataItem, data, indice, editPost }) => {
         >
           <GiCheckMark
             fontSize={14}
-            style={{ color: checkedItem ? "#777" : "chartreuse" }}
+            style={{
+              color: checkedItem
+                ? "var(--colorFontDisabled)"
+                : "var(--colorFontPrimary)",
+            }}
           />
         </button>
         <button
@@ -63,7 +67,7 @@ const CheckBoxItem = ({ dataItem, data, indice, editPost }) => {
             setClickOnDelete(true);
           }}
         >
-          <MdClose fontSize={19} color="chartreuse" />
+          <MdClose fontSize={19} color="var(--colorFontPrimary)" />
         </button>
       </div>
     </div>

@@ -4,6 +4,16 @@
   box-sizing: border-box;
 }
 
+:root{
+  --colorBackground: #222;
+  --colorBackgroundCard: #333;
+  --colorFontPrimary: chartreuse;
+  --colorFontSecondary: #fff;
+  --colorAddMoreCheck: #666;
+  --colorBackgroundLine: #444;
+  --colorFontDisabled: #777;
+}
+
 
 body {
   margin: 0;
@@ -12,8 +22,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #222;
-  color: #fff;
+  background-color: var(--colorBackground);
+  color: var(--colorFontSecondary);
+  transition: .5s;
 }
 
 code {

@@ -11,6 +11,16 @@ const AuthProvider = ({ children }) => {
 
   const [token, setToken] = useState("");
 
+  const [theme, setTheme] = useState("dark");
+
+  const [organization, setOrganization] = useState("");
+
+  const [idConfiguration, setIdConfiguration] = useState("");
+
+  
+
+
+
   return (
     <AuthContexts.Provider
       value={{
@@ -22,6 +32,12 @@ const AuthProvider = ({ children }) => {
         setshowInfoIndexED,
         setToken,
         token,
+        theme,
+        setTheme,
+        organization,
+        setOrganization,
+        idConfiguration,
+        setIdConfiguration
       }}
     >
       {children}

@@ -1,6 +1,6 @@
 .containerLogin {
   max-width: 500px;
-  background-color: #444;
+  background-color: var(--colorBackgroundLine);
   border-radius: 10px;
   padding: 20px;
   display: flex;

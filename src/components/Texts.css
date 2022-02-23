@@ -4,12 +4,12 @@
   display: flex;
   justify-content: space-between;
 }
-h4{
+.titleTexts{
   flex: 1;
   font-size: 1em;
   text-align: center;
   
-  color: chartreuse;
+  color: var(--colorFontPrimary);
 }
 
 .textContent{
@@ -20,6 +20,6 @@ h4{
 
 .buttonX{
   
-  background-color: #333;
+  background-color: transparent;
   border: none;
 }

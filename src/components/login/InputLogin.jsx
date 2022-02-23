@@ -29,39 +29,10 @@ const InputLogin = ({ setIsRegistering, isRegistering }) => {
 
   const [password, setPassword] = useState("");
 
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const showErrorMessage = (error) => {
-    setHasError(true);
-
-    switch (error.message) {
-      case "Firebase: Error (auth/internal-error).":
-        return setErrorMessage("Dados incompleto");
-      case "Firebase: Error (auth/missing-email).":
-        return setErrorMessage("Adicione o Email");
-      case "Firebase: Error (auth/invalid-email).":
-        return setErrorMessage("Email inválido");
-      case "Firebase: Password should be at least 6 characters (auth/weak-password).":
-        return setErrorMessage("A senha deve conter no mínimo 6 caracteres");
-      case "Firebase: Error (auth/email-already-in-use).":
-        return setErrorMessage("Email utilizado por outro usuáro");
-      case "Firebase: Error (auth/wrong-password).":
-        return setErrorMessage("Senha inválida");
-      case "Firebase: Error (auth/user-not-found).":
-        return setErrorMessage("Usuário não existe");
-      case "Senhas não conferem":
-        return setErrorMessage("Senhas não conferem");
-      default:
-        return setErrorMessage(
-          "cadastro não efetivado, confira os dados e tente novamente"
-        );
-    }
-  };
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setHasError(false);
     setErrorMessage("");
 
     try {
@@ -72,14 +43,15 @@ const InputLogin = ({ setIsRegistering, isRegistering }) => {
 
       navigate("/");
     } catch (error) {
-      showErrorMessage(error);
+      console.log("Erro do catch:", JSON.stringify(error));
+      setErrorMessage(error);
     }
   };
 
   const handleLoginGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider).then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
+        GoogleAuthProvider.credentialFromResult(result);
         // informaçoes do usuario.
         //const token = credential.accessToken;
         //console.log(credential)
@@ -91,7 +63,7 @@ const InputLogin = ({ setIsRegistering, isRegistering }) => {
       });
     } catch (error) {
       console.log(error);
-      showErrorMessage(error);
+      setErrorMessage(error);
     }
   };
 
@@ -126,7 +98,7 @@ const InputLogin = ({ setIsRegistering, isRegistering }) => {
           />
         </div>
 
-        {hasError && <ErrorsLogin errorMessage={errorMessage} />}
+        <ErrorsLogin error={errorMessage} />
 
         <button className="logar" type="submit">
           Entrar
@@ -144,7 +116,6 @@ const InputLogin = ({ setIsRegistering, isRegistering }) => {
         className="buttonState"
         onClick={() => {
           setIsRegistering(!isRegistering);
-          setHasError(false);
         }}
       >
         Não tem conta? Cadastrar

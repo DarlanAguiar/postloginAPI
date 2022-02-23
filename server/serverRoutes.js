@@ -63,7 +63,7 @@ router.get("/post/:userdb/:token", async (req, res) => {
       const result = await getDocs(query(collection(db, userDB)));
       let arrayData = [];
 
-      result.docs.map((data) => {
+      result.docs.forEach((data) => {
         arrayData.push({
           id: data.id,
           title: data.data().title,

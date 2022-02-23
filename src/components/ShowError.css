@@ -1,17 +1,14 @@
-
-.containerWindowError{
+.containerWindowError {
   height: 100vh;
   width: 100vw;
-  background-color: rgba(128, 255, 0, 0.249);
+  background-color: rgba(0, 0, 0, 0.633);
   position: fixed;
   z-index: 5;
 }
-.containerError{
-
-
-  background-color: #333;
+.containerError {
+  background-color: var(--colorBackgroundCard);
   border-radius: 7px;
-  border: 1px solid rgb(128, 255, 0);
+  border: 1px solid var(--colorFontPrimary);
 
   padding: 20px;
   display: flex;
@@ -25,30 +22,29 @@
   transform: translate(-50%, -50%);
 }
 
-.titleError{
-  color: chartreuse
-
+.titleError {
+  color: var(--colorFontPrimary);
 }
 
-.closeError{
+.closeError {
   position: absolute;
   right: 10px;
   top: 10px;
 }
 
-.textWork{
-  font-size: .9em;
+.textWork {
+  font-size: 0.9em;
   margin-bottom: 10px;
   margin-top: 5px;
 }
 
-.appOff{
-  color: yellow;
+.appOff {
+  color: var(--colorFontPrimary);
   cursor: pointer;
-  transition: all ease .3s;
+  transition: all ease 0.3s;
 }
 
-.appOff:hover{
+.appOff:hover {
   transform: scale(1.1);
 }
 

@@ -10,6 +10,7 @@ import { BsMic, BsSearch } from "react-icons/bs";
 import moment from "moment";
 import { TiPlus } from "react-icons/ti";
 import { ImExit } from "react-icons/im";
+import { RiSettings5Fill } from "react-icons/ri";
 
 import CardPostit from "./components/CardPostit";
 import Footer from "./components/Footer";
@@ -25,18 +26,21 @@ import { firebaseApp } from "./database/firebase";
 import { getAuth, signOut } from "firebase/auth";
 import ShowError from "./components/SHowError";
 import ScrapBookOffline from "./components/scrapbookOffline";
+import Settings from "./components/Settings";
+import { organizeByScheme } from "./settingsFunctions/settingsFunction";
+import { getConfigs } from "./database/stylesSettingsOnFirebase";
+
 const auth = getAuth(firebaseApp);
 
-
-let buttonCounterAskAgain;
-if(localStorage.contPostIt){
-  let visitsNumber = Number(localStorage.contPostIt) + 1
-  localStorage.contPostIt = visitsNumber
-  buttonCounterAskAgain = visitsNumber
-}else{
-  localStorage.setItem("contPostIt", 11)
+let doNotAskAgainButtonCounter;
+if (localStorage.contPostIt) {
+  let visitsNumber = Number(localStorage.contPostIt) + 1;
+  localStorage.contPostIt = visitsNumber;
+  doNotAskAgainButtonCounter = visitsNumber;
+} else {
+  localStorage.setItem("contPostIt", 11);
 }
-let numberMessageOf = 0
+let numberMessageOf = 0;
 function Home() {
   const [menu, SetMenu] = useState(false);
   const [infoDB, setInfoDB] = useState([]);
@@ -44,20 +48,50 @@ function Home() {
   const [textSearch, setTextSearch] = useState("");
   const [ouvindo, setOuvindo] = useState(false);
   const [showModalError, setShowModalError] = useState(false);
-
   const [showScrapBookOffline, setShowScrapBookOffline] = useState(false);
+  const [clickedCloseImportPostIt, setClickedCloseImportPostIt] =
+    useState(false);
+  const [showComponentSettings, setShowComponentSettings] = useState(false);
 
-  const [clickedCloseImportPostIt, setClickedCloseImportPostIt] = useState(false);
+  const {
+    userEmail,
+    setAuthenticated,
+    setUserEmail,
+    showInfoIndexED,
+    token,
+    theme,
+    setTheme,
+    setOrganization,
+    idConfiguration,
+    setIdConfiguration,
+  } = useContext(AuthContexts);
+
+  const navigate = useNavigate();
 
   const notShowMessageInSection = () => {
     setClickedCloseImportPostIt(true);
     setShowScrapBookOffline(false);
   };
 
-  const { userEmail, setAuthenticated, setUserEmail, showInfoIndexED, token } =
-    useContext(AuthContexts);
+  const organizeBySettings = (configFromFirebase, scheme, data) => {
+    let configuration;
 
-  const navigate = useNavigate();
+    if (configFromFirebase) {
+      configuration = configFromFirebase;
+    } else {
+      configuration = {
+        id: idConfiguration,
+        theme: theme,
+        organization: scheme,
+        user: userEmail,
+      };
+      data = infoDB;
+    }
+
+    const organizedData = organizeByScheme(data, scheme, configuration);
+
+    setInfoDB(organizedData);
+  };
 
   useEffect(() => {
     fetchPostIts();
@@ -67,34 +101,32 @@ function Home() {
     SetMenu(!menu);
   };
 
-  console.log(localStorage.contPostIt);
-
   const clickedDoNotAskAgain = () => {
-    setShowScrapBookOffline(false)
-    localStorage.contPostIt = 0
-  }
-
+    setShowScrapBookOffline(false);
+    localStorage.contPostIt = 0;
+  };
 
   const importMessagesIndexedBD = async () => {
-    setShowScrapBookOffline(false)
-    await checkDataOffline(userEmail, token)
-    fetchPostIts()
-  }
- 
+    setShowScrapBookOffline(false);
+    await checkDataOffline(userEmail, token);
+    fetchPostIts();
+  };
+
   async function fetchPostIts() {
     //se tiver um usuário uso o firebase
     if (userEmail) {
       const dataDB = await fetchData(userEmail, token);
-      if (!clickedCloseImportPostIt && Number(localStorage.contPostIt) > 10) {
-        const dataOff = await checkDataOffline();
-        //setNumberMessagesOffline(dataOff.length);
-        numberMessageOf = (dataOff.length)
+      const dataOff = await checkDataOffline();
+      numberMessageOf = dataOff.length;
+      if (
+        !clickedCloseImportPostIt &&
+        Number(doNotAskAgainButtonCounter) > 10
+      ) {
         setTimeout(() => {
-          if (dataOff.length > 0) {
+          if (numberMessageOf > 0) {
             setShowScrapBookOffline(true);
           }
-        }, 30);
-        
+        }, 2000);
       }
 
       if (dataDB.error) {
@@ -104,7 +136,18 @@ function Home() {
         if (showModalError) {
           setShowModalError(false);
         }
-        setInfoDB(dataDB);
+
+        const configs = await getConfigs(userEmail);
+        if (configs === undefined) {
+          setInfoDB(dataDB);
+        } else {
+          setInfoDB(dataDB);
+          setOrganization(configs.organization);
+          setTheme(configs.theme);
+          setIdConfiguration(configs.id);
+          //applyTheme(configs.theme)
+          organizeBySettings(configs, configs.organization, dataDB);
+        }
       }
     } else {
       const dataDB = await fetchDataIndexED();
@@ -192,6 +235,10 @@ function Home() {
     navigate("/login");
   };
 
+  const handleShowSettings = () => {
+    setShowComponentSettings(!showComponentSettings);
+  };
+
   return (
     <div className="body">
       <Header
@@ -199,6 +246,13 @@ function Home() {
         setShow={showMenu}
         fetchPostIts={fetchPostIts}
         setShowModalError={setShowModalError}
+      />
+      <Settings
+        showSettings={showComponentSettings}
+        handleShowSettings={handleShowSettings}
+        numberMessageOf={numberMessageOf}
+        importMessagesIndexedBD={importMessagesIndexedBD}
+        organizeBySettings={organizeBySettings}
       />
 
       {showScrapBookOffline && (
@@ -244,15 +298,19 @@ function Home() {
           />
         </div>
         <BsSearch
-          color="chartreuse"
+          color="var(--colorFontPrimary)"
           fontSize={27}
           onClick={showSearch}
           className={"lupa"}
         />
       </div>
-      <div onClick={handleLogout} className="exit">
-        <ImExit style={{ fontSize: "22px" }} />
-      </div>
+
+      <RiSettings5Fill
+        className="homeBottonSettings"
+        onClick={handleShowSettings}
+      />
+
+      <ImExit onClick={handleLogout} className="homeButtonExit" />
 
       {showModalError && <ShowError handleLogout={handleLogout} />}
 

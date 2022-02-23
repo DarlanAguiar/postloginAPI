@@ -1,0 +1,81 @@
+.settingsContainer{
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 6;
+  overflow: auto; 
+  background-color: var(--colorBackgroundCard);
+  padding: 20px 10px;
+  width: 290px;
+  height: 100vh;
+  border: 2px solid var(--colorFontPrimary);
+  transition: .5s;
+}
+
+.settingsTitle {
+  font-size: 20px;
+  margin-right: 25px;
+  margin-bottom: 20px;
+}
+
+.settingsButtonClose{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  color: var(--colorFontPrimary);
+}
+
+.settingsTheme, .settingsOrganization{
+ text-align: center;
+ margin: 15px 0 ;
+}
+
+.settingsThemeButtons{
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 15px;
+}
+.settingsThemeButtons button{
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.settingsThemeButtons .buttonDark{
+  color: white;
+  background-color: #444;
+}
+
+.settingsThemeButtons .buttonDarkPink{
+  background-color: #d4b2d8;
+}
+
+
+.settingsOrganizationButtons{
+  display: flex;
+  flex-direction: column;
+}
+
+.settingsOrganizationButtons button{
+  width: fit-content;
+  padding: 5px;
+  margin: 5px 0;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.settingsQtdPostOff{
+  text-align: center;
+  margin: 10px 0;
+}
+
+.settingsImportPostOffline{
+  display: block;
+  margin: 10px auto;
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+

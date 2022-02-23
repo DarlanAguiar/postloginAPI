@@ -61,9 +61,7 @@ export function salvarDadosIndexED(data, userDB, token) {
   };
 
   listaParaAdicionar.add(newItem);
-  /* const email = "darlangaguiar@gmail.com"
-  const token = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImYyNGYzMTQ4MTk3ZWNlYTUyOTE3YzNmMTgzOGFiNWQ0ODg3ZWEwNzYiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiRGFybGFuIGdvbWVzIGFndWlhciIsInBpY3R1cmUiOiJodHRwczovL2xoMy5nb29nbGV1c2VyY29udGVudC5jb20vYS0vQU9oMTRHaTl5cjlad01Xa0FQUE80VkdVZzMtUXE5a25ldFpua3JUeVJ4aUExOFE9czk2LWMiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcG9zdC03MjM1ZSIsImF1ZCI6InBvc3QtNzIzNWUiLCJhdXRoX3RpbWUiOjE2NDQ3Mzk0MjAsInVzZXJfaWQiOiJPVFFyRG1GOGw0ZTh2enI4Nk5yOTJFZ3hpSmwyIiwic3ViIjoiT1RRckRtRjhsNGU4dnpyODZOcjkyRWd4aUpsMiIsImlhdCI6MTY0NDczOTQyMCwiZXhwIjoxNjQ0NzQzMDIwLCJlbWFpbCI6ImRhcmxhbmdhZ3VpYXJAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZ29vZ2xlLmNvbSI6WyIxMDk4NDk0NTY2OTg3MTE5NzA1MjMiXSwiZW1haWwiOlsiZGFybGFuZ2FndWlhckBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJnb29nbGUuY29tIn19.HBbLTgRaGmHTB59VEFuITxE4thZ5CVc-8qui06wumPG7dG7oaLFaDjQm4yFbdzRjvjJunQ_UiT7sJe3zOFF792lV66CtjvVpQG8HklhlmSkNy86hNm58FAC_gnwVnY5tX5aPls-6QujQXpyaoNpunnYifFyBK3kQj6dpKt_sISmNcx-UJqct3xFm9cjoWRmqg3HW8KuYWfuSv2D_NSSb-FIRv4LYxMsObnuvUkAqaxZSDPhrb18ndiOtUE9fe0p2MIMi-mOiSU1Kt4Dbo7eFwAOudUZ5yLospIX_5sq5lBFqzIwdVcYHfYd_RyR5LRYwqT5VPsIA1koTAAviSwGg0g"
-  salvarDados(newItem, email, token); */
+
 }
 
 export const deleteDataIndexED = (id) => {
@@ -152,15 +150,17 @@ export async function checkDataOffline(userEmail, token) {
           salvarDados(data, userEmail, token)
           deleteDataIndexED(id)
           
+        }else{
+
+          dados.push({
+            id: id,
+            title: title,
+            message: text,
+            checkList: checkList,
+            date: date,
+            editDate: editDate,
+          });
         }
-        dados.push({
-          id: id,
-          title: title,
-          message: text,
-          checkList: checkList,
-          date: date,
-          editDate: editDate,
-        });
 
         cursor.continue();
       } else {

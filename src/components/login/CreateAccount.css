@@ -1,6 +1,6 @@
 .containerAccount {
   max-width: 500px;
-  background-color: #444;
+  background-color: var(--colorBackgroundLine);
   border-radius: 10px;
   padding: 20px;
   display: flex;
@@ -17,6 +17,7 @@
 
 h1 {
   color: yellow;
+  text-shadow: 1px 1px 1px black;
 }
 
 .divInput {

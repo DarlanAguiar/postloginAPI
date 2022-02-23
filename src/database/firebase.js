@@ -15,7 +15,7 @@ const URL = "/post";
 //const URL = "http://localhost:3000/post";
 
 export const salvarDados = async (data, userDB, token) => {
-  console.log(userDB, token);
+  
   let message = {};
 
   await fetch(URL, {

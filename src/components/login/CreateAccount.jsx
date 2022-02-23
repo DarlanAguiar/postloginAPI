@@ -21,49 +21,20 @@ const CreateAccount = ({ setIsRegistering, isRegistering }) => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
 
-  const [hasError, setHasError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
-
-  const showErrorMessage = (error) => {
-    setHasError(true);
-
-    switch (error.message) {
-      case "Firebase: Error (auth/internal-error).":
-        return setErrorMessage("Dados incompleto");
-      case "Firebase: Error (auth/missing-email).":
-        return setErrorMessage("Adicione o Email");
-      case "Firebase: Error (auth/invalid-email).":
-        return setErrorMessage("Email inválido");
-      case "Firebase: Password should be at least 6 characters (auth/weak-password).":
-        return setErrorMessage("A senha deve conter no mínimo 6 caracteres");
-      case "Firebase: Error (auth/email-already-in-use).":
-        return setErrorMessage("Email utilizado por outro usuáro");
-      case "Firebase: Error (auth/wrong-password).":
-        return setErrorMessage("Senha inválida");
-      case "Firebase: Error (auth/user-not-found).":
-        return setErrorMessage("Usuário não existe");
-      case "Senhas não conferem":
-        return setErrorMessage("Senhas não conferem");
-      default:
-        return setErrorMessage(
-          "cadastro não efetivado, confira os dados e tente novamente"
-        );
-    }
-  };
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setHasError(false);
     setErrorMessage("");
 
     if (password === passwordConfirm) {
       try {
         await createUserWithEmailAndPassword(auth, email, password);
       } catch (error) {
-        showErrorMessage(error);
+        setErrorMessage(error);
       }
     } else {
-      showErrorMessage({ message: "Senhas não conferem" });
+      setErrorMessage({ message: "Senhas não conferem" });
     }
   };
 
@@ -111,8 +82,7 @@ const CreateAccount = ({ setIsRegistering, isRegistering }) => {
           />
         </div>
 
-       
-        {hasError && <ErrorsLogin errorMessage={errorMessage} />}
+        <ErrorsLogin error={errorMessage} />
 
         <button className="Cadastrar" type="submit">
           Cadastrar
@@ -123,7 +93,6 @@ const CreateAccount = ({ setIsRegistering, isRegistering }) => {
         className="buttonState"
         onClick={() => {
           setIsRegistering(!isRegistering);
-          setHasError(false);
         }}
       >
         Já tem conta? Iniciar seção

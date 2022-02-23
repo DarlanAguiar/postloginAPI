@@ -15,7 +15,7 @@ const ScrapBookOffline = ({
         className="closeScrapbookOffline"
         onClick={() => notShowMessageInSection()}
       >
-        <FaRegWindowClose style={{ fontSize: "22px" }} />
+        <FaRegWindowClose style={{ fontSize: "22px", color: "var(--colorFontPrimary)" }} />
       </p>
       <p className="scrapbookofflineParagraph">
         Você possui {numberMessagesOffline} recado
