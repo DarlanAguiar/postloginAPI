@@ -136,9 +136,9 @@ export const applyTheme = (theme, userConfiguration) => {
     themeStyle.setProperty("--colorBackgroundLine", "rgb(220, 240, 240)");
     themeStyle.setProperty("--colorFontDisabled", "#999");
   } else if (theme === "darkPink") {
-    themeStyle.setProperty("--colorBackground", "#EFCEFA");
+    themeStyle.setProperty("--colorBackground", "#d84797");
     themeStyle.setProperty("--colorBackgroundCard", "#d4b2d8");
-    themeStyle.setProperty("--colorFontPrimary", "#2E262F");
+    themeStyle.setProperty("--colorFontPrimary", "#190e4f");
     themeStyle.setProperty("--colorFontSecondary", "#826cf");
     themeStyle.setProperty("--colorAddMoreCheck", "#666");
     themeStyle.setProperty("--colorBackgroundLine", "#A88FAC");
