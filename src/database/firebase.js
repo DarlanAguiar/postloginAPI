@@ -1,4 +1,7 @@
+import { v4 as uuidv4 } from "uuid";
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyC78uH7W_visZbGpxA_g41j4_2-GxAJKXw",
@@ -11,11 +14,12 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 
+export const db = getFirestore();
+
 const URL = "/post";
 //const URL = "http://localhost:3000/post";
 
 export const salvarDados = async (data, userDB, token) => {
-  
   let message = {};
 
   await fetch(URL, {
@@ -34,8 +38,6 @@ export const salvarDados = async (data, userDB, token) => {
       }
     });
   return message;
-
-  
 };
 
 export const fetchData = async (userDB, token) => {
@@ -59,12 +61,7 @@ export const fetchData = async (userDB, token) => {
 
       arrayData = { error: "Problemas no servidor" };
 
-      console.log("Antes da chamada");
-
       console.log(err);
-      console.log("Depois da chamada");
-
-      //mandar uma mensagem no APP de erros
 
       return arrayData;
     });
@@ -72,7 +69,7 @@ export const fetchData = async (userDB, token) => {
   return arrayData;
 };
 
-export const deleteData = async (id, userDB, token) => {
+export const deleteData = async (id, userDB, token, data) => {
   let message = {};
 
   await fetch(URL, {
@@ -81,7 +78,7 @@ export const deleteData = async (id, userDB, token) => {
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*",
     },
-    body: JSON.stringify({ id: id, userDB: userDB, token: token }),
+    body: JSON.stringify({ id: id, userDB: userDB, token: token, data: data }),
   })
     .then((resp) => resp.json())
     .then((resp) => {
@@ -111,4 +108,15 @@ export const updateData = async (data, userDB, token) => {
       }
     });
   return message;
+};
+
+export const addSharePost = async (userLocal, data) => {
+  const id = uuidv4();
+  const userShared = data.share;
+
+  await setDoc(doc(db, userLocal, id), data);
+
+  data.share = userLocal;
+
+  await setDoc(doc(db, userShared, id), data);
 };

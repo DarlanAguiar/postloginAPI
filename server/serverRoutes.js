@@ -59,7 +59,6 @@ router.get("/post/:userdb/:token", async (req, res) => {
 
   if (validated) {
     try {
-  
       const result = await getDocs(query(collection(db, userDB)));
       let arrayData = [];
 
@@ -71,6 +70,8 @@ router.get("/post/:userdb/:token", async (req, res) => {
           checkList: data.data().checkList,
           date: data.data().date,
           editDate: data.data().editDate,
+          share: data.data().share,
+          trash: data.data().trash || false,
         });
       });
 
@@ -109,6 +110,16 @@ router.patch("/post", async (req, res) => {
   const validated = await validateToken(userDB, token);
 
   if (validated) {
+    if (data.share) {
+      const userShare = data.share;
+      data.share = userDB;
+      // let newData = data;
+      // newData.share = userDB;
+      await updateDoc(doc(db, userShare, id), data);
+
+      data.share = userShare;
+    }
+
     try {
       await updateDoc(doc(db, userDB, id), data);
       res.status(200).json({ message: "Atualizado com sucesso" });
@@ -122,10 +133,18 @@ router.patch("/post", async (req, res) => {
 });
 
 router.delete("/post", async (req, res) => {
-  const { id, userDB, token } = req.body;
+  const { id, userDB, token, data } = req.body;
   const validated = await validateToken(userDB, token);
 
+  await deleteDoc(doc(db, userDB, id));
+
   if (validated) {
+    if (data.share) {
+      const userShare = data.share;
+      await deleteDoc(doc(db, userShare, id));
+     
+    }
+
     try {
       await deleteDoc(doc(db, userDB, id));
       res.status(200).json({ message: "Deletado com sucesso" });

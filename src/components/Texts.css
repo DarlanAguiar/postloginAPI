@@ -8,7 +8,7 @@
   flex: 1;
   font-size: 1em;
   text-align: center;
-  
+  overflow: hidden;
   color: var(--colorFontPrimary);
 }
 
@@ -22,4 +22,9 @@
   
   background-color: transparent;
   border: none;
+}
+
+.textsRefresh{
+  color: var(--colorFontPrimary);
+  font-size: 20px;
 }

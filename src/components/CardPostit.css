@@ -42,6 +42,31 @@
   background-color: var(--colorBackgroundLine);
 }
 
+
+
+.cardPostitButtonRestore{
+ /*  position: absolute;
+  right: 10px;
+  bottom: 10px; */
+  margin-bottom: 7px;
+  color: var(--colorFontPrimary);
+  background-color: var(--colorBackgroundLine);
+  padding: 5px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+
+.homeShare{
+  margin-bottom: 7px;
+  font-size: 11px;
+}
+
+.homeShareSpan{
+ font-weight: bold;
+ 
+}
+
 @media screen and (min-width: 900px) {
   .card {
     width: 32%;

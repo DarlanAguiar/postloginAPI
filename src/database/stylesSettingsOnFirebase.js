@@ -51,12 +51,12 @@ export const getConfigs = async (user) => {
 export const updateConfigs = async (data) => {
   const userConfig = `${data.user}.config`;
 
-  const configs = {
-    theme: data.theme,
-    organization: data.organization,
-    user: data.user,
-  };
-  console.log(data);
+  // const configs = {
+  //   theme: data.theme,
+  //   organization: data.organization,
+  //   user: data.user,
+  // };
 
   await updateDoc(doc(db, userConfig, data.id), data);
 };
+

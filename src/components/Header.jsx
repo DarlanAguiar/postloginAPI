@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { salvarDados } from "../database/firebase";
+import { addSharePost, salvarDados } from "../database/firebase";
 import { salvarDadosIndexED } from "../database/database";
 
 import { AuthContexts } from "../contexts/contexts";
@@ -16,8 +16,15 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
   const [noText, setNoText] = useState(false);
   const [checkItem, setCheckItem] = useState("");
   const [listCheckItem, setListCheckItem] = useState([]);
+  const [emailShare, setEmailShare] = useState("");
+  const [validEmail, setValidEmail] = useState(false);
 
   const { userEmail, token } = useContext(AuthContexts);
+
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    setValidEmail(re.test(email));
+  }
 
   const formatDate = (date) => {
     setDateValue(date);
@@ -26,6 +33,11 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
   };
 
   const checkText = () => {
+    if (emailShare.length > 0 && !validEmail) {
+      alert("Digite um email válido");
+      return;
+    }
+
     if (text.length > 0) {
       addDb();
 
@@ -49,6 +61,7 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
     setText("");
     setDate("");
     setDateValue("");
+    setEmailShare("");
     setListCheckItem([]);
     setNoText(false);
   };
@@ -62,21 +75,32 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
     };
 
     if (userEmail) {
-      const addDB = await salvarDados(data, userEmail, token);
+      let addData;
+      if (emailShare.length > 15) {
+        data.share = emailShare;
+        addData = await saveSharedPost(data);
+      } else {
+        console.log("email inválido");
+        addData = await salvarDados(data, userEmail, token);
+      }
 
-      if (addDB.error) {
+      if (addData.error) {
         setShowModalError(true);
-        console.error(addDB.error);
+        console.error(addData.error);
       }
     } else {
       salvarDadosIndexED(data);
     }
 
     clearFilds();
-    //
+
     setShow();
 
     fetchPostIts();
+  };
+
+  const saveSharedPost = async (data) => {
+    await addSharePost(userEmail, data);
   };
 
   return (
@@ -131,6 +155,31 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
             }}
           />
         </div>
+
+        {userEmail && (
+          <div className="div-share">
+            <label className="label-share" htmlFor="share">
+              Compartilhar post com:
+            </label>
+            <input
+              placeholder="Digite o email para compartilhar"
+              id="share"
+              className="share"
+              type="text"
+              value={emailShare}
+              onChange={(e) => {
+                setEmailShare(e.target.value);
+                validateEmail(e.target.value);
+              }}
+            />
+            {emailShare.length > 0 &&
+              (validEmail ? (
+                <p className="headerValidEmail">Email Válido</p>
+              ) : (
+                <p className="headerInvalidEmail">Email Inválido</p>
+              ))}
+          </div>
+        )}
 
         <div className="botoes-deslizante">
           <button

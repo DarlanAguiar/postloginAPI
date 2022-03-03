@@ -10,6 +10,7 @@ import { BsMic, BsSearch } from "react-icons/bs";
 import moment from "moment";
 import { TiPlus } from "react-icons/ti";
 import { ImExit } from "react-icons/im";
+
 import { RiSettings5Fill } from "react-icons/ri";
 
 import CardPostit from "./components/CardPostit";
@@ -29,6 +30,8 @@ import ScrapBookOffline from "./components/scrapbookOffline";
 import Settings from "./components/Settings";
 import { organizeByScheme } from "./settingsFunctions/settingsFunction";
 import { getConfigs } from "./database/stylesSettingsOnFirebase";
+import Undo from "./components/Undo";
+import { separateDeletedPost } from "./controller/fileHome";
 
 const auth = getAuth(firebaseApp);
 
@@ -43,6 +46,10 @@ if (localStorage.contPostIt) {
 let numberMessageOf = 0;
 function Home() {
   const [menu, SetMenu] = useState(false);
+  const [infoUndo, setInfoUndo] = useState({});
+  const [showUndo, setShowUndo] = useState(false);
+  const [deletedPosts, setDeletedPosts] = useState([]);
+  const [viewDeletdPost, setViewDeletdPost] = useState(false);
   const [infoDB, setInfoDB] = useState([]);
   const [visibleSearch, setVisibleSearch] = useState(false);
   const [textSearch, setTextSearch] = useState("");
@@ -95,7 +102,7 @@ function Home() {
 
   useEffect(() => {
     fetchPostIts();
-  }, [userEmail]);
+  }, [userEmail, viewDeletdPost]);
 
   const showMenu = () => {
     SetMenu(!menu);
@@ -116,6 +123,7 @@ function Home() {
     //se tiver um usuário uso o firebase
     if (userEmail) {
       const dataDB = await fetchData(userEmail, token);
+
       const dataOff = await checkDataOffline();
       numberMessageOf = dataOff.length;
       if (
@@ -141,12 +149,22 @@ function Home() {
         if (configs === undefined) {
           setInfoDB(dataDB);
         } else {
-          setInfoDB(dataDB);
+          const separatePosts = separateDeletedPost(dataDB);
+          const arrayPost = separatePosts[0];
+          const arrayDeletedPost = separatePosts[1];
+
+          setDeletedPosts(arrayDeletedPost);
+          setInfoDB(arrayPost);
+
           setOrganization(configs.organization);
           setTheme(configs.theme);
           setIdConfiguration(configs.id);
           //applyTheme(configs.theme)
-          organizeBySettings(configs, configs.organization, dataDB);
+          organizeBySettings(
+            configs,
+            configs.organization,
+            viewDeletdPost ? arrayDeletedPost : arrayPost
+          );
         }
       }
     } else {
@@ -155,9 +173,15 @@ function Home() {
     }
   }
 
-  const deletePost = async (id) => {
+  const clearTrash = () => {
+    deletedPosts.forEach((post) => {
+      deletePost(post.id);
+    });
+  };
+
+  const deletePost = async (id, data) => {
     if (userEmail) {
-      const deleted = await deleteData(id, userEmail, token);
+      const deleted = await deleteData(id, userEmail, token, data);
       if (deleted.error) {
         setShowModalError(true);
         console.error(deleted.error);
@@ -178,8 +202,13 @@ function Home() {
       message: data.message,
       checkList: data.checkList,
       date: data.date,
+      trash: data.trash,
       editDate: dataAtual,
     };
+
+    if (data.share) {
+      updatedData.share = data.share;
+    }
 
     if (userEmail) {
       const update = await updateData(updatedData, userEmail, token);
@@ -247,12 +276,24 @@ function Home() {
         fetchPostIts={fetchPostIts}
         setShowModalError={setShowModalError}
       />
+
+      {viewDeletdPost &&
+        (deletedPosts.length === 0 ? (
+          <h1 className="homeZeroPosts">Lixeira Vazia</h1>
+        ) : (
+          ""
+        ))}
+
       <Settings
         showSettings={showComponentSettings}
         handleShowSettings={handleShowSettings}
         numberMessageOf={numberMessageOf}
         importMessagesIndexedBD={importMessagesIndexedBD}
         organizeBySettings={organizeBySettings}
+        setInfoDB={setInfoDB}
+        deletedPosts={deletedPosts}
+        setViewDeletdPost={setViewDeletdPost}
+        clearTrash={clearTrash}
       />
 
       {showScrapBookOffline && (
@@ -271,11 +312,25 @@ function Home() {
           editPost={editPost}
           textInputSearch={textSearch}
           key={id}
+          setInfoUndo={setInfoUndo}
+          setShowUndo={setShowUndo}
+          viewDeletdPost={viewDeletdPost}
+          fetchPostIts={fetchPostIts}
         />
       ))}
 
       <button className="botao-adicionar" onClick={showMenu}>
         <TiPlus fontSize={30} />
+      </button>
+
+      <button
+        className="homeButtonCloseTrash"
+        onClick={() => {
+          setViewDeletdPost(false);
+        }}
+        style={{ left: viewDeletdPost ? "8px" : "-200px" }}
+      >
+        Fechar lixeira
       </button>
 
       <div
@@ -304,6 +359,15 @@ function Home() {
           className={"lupa"}
         />
       </div>
+
+      <Undo
+        infoUndo={infoUndo}
+        userEmail={userEmail}
+        token={token}
+        fetchPostIts={fetchPostIts}
+        setShowUndo={setShowUndo}
+        showUndo={showUndo}
+      />
 
       <RiSettings5Fill
         className="homeBottonSettings"

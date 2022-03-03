@@ -58,12 +58,22 @@
   
 }
 
-.settingsOrganizationButtons button{
+.settingsOrganizationButtons button, .settingsTrashButtons button{
   width: fit-content;
   padding: 5px;
   margin: 5px 0;
   font-weight: bold;
   border-radius: 5px;
+}
+
+.settingsTrashTitle{
+  text-align: center;
+  margin: 15px 0 ;
+}
+
+.settingsTrashButtons{
+  display: flex;
+  justify-content: space-around;
 }
 
 .settingsQtdPostOff{
@@ -78,5 +88,6 @@
   font-weight: bold;
   border-radius: 5px;
 }
+
 
 

@@ -41,7 +41,7 @@ textarea {
   border-radius: 0 8px 8px 0;
   font-weight: bold;
   background-color: var(--colorBackground);
-  color: var(--);
+  color: var(--colorFontPrimary);
 }
 
 .label-data {
@@ -52,6 +52,31 @@ textarea {
   margin: 3px 0;
   border-radius: 8px;
   margin-left: 3px;
+}
+
+.div-share{
+  display: flex;
+  flex-direction: column;
+
+}
+.div-share label{
+  font-weight: bold;
+
+}
+
+.div-share input{
+  padding: 7px;
+  border-radius: 8px;
+  margin-bottom: 5px;
+}
+
+.headerInvalidEmail{
+  color: red;
+  margin: 0 auto;
+}
+.headerValidEmail{
+  color: var(--colorFontPrimary);
+  margin: 0 auto;
 }
 
 .botoes-deslizante {

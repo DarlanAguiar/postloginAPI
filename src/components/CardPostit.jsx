@@ -5,7 +5,16 @@ import moment from "moment";
 import "./CardPostit.css";
 import CheckBoxList from "./CheckBoxList";
 
-const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
+const CardPostit = ({
+  info,
+  deletePost,
+  editPost,
+  textInputSearch,
+  setInfoUndo,
+  setShowUndo,
+  viewDeletdPost,
+  fetchPostIts,
+}) => {
   const [invalidDate, setInvalidDate] = useState(false);
   const [searchMatch, setSearchMatch] = useState(true);
   const [checkText, setcheckText] = useState("Adicionar...");
@@ -50,15 +59,12 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
   const validateDate = (date) => {
     if (date.length < 1) {
       setInvalidDate(false);
-      info.date = ""
+      info.date = "";
       editPost(info);
       return;
     }
 
-    if (
-      moment(date, "DD-MM-YYYY").isValid() &&
-      /\d\d-\d\d-\d{4}/.test(date)
-    ) {
+    if (moment(date, "DD-MM-YYYY").isValid() && /\d\d-\d\d-\d{4}/.test(date)) {
       info.date = date;
       setInvalidDate(false);
       editPost(info);
@@ -68,13 +74,23 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
   };
 
   return (
-    <div className="card" style={{ display: searchMatch ? "" : "none" }}>
+    <div
+      className="card"
+      style={{
+        display: searchMatch ? "" : "none",
+        border: info.share ? "2px solid var(--colorFontPrimary)" : "",
+      }}
+    >
       <Texts
         data={info}
         deletePost={deletePost}
         editPost={editPost}
         dataEdit={info}
         setSearchMatch={setSearchMatch}
+        setInfoUndo={setInfoUndo}
+        setShowUndo={setShowUndo}
+        viewDeletdPost={viewDeletdPost}
+        fetchPostIts={fetchPostIts}
       />
       <CheckBoxList data={info} editPost={editPost} />
       <p
@@ -96,11 +112,27 @@ const CardPostit = ({ info, deletePost, editPost, textInputSearch }) => {
         }}
       >
         {info.date}
-      </p>
+      </p>{" "}
+      {info.trash && (
+        <button
+          className="cardPostitButtonRestore"
+          onClick={() => {
+            info.trash = false;
+            editPost(info);
+          }}
+        >
+          Restaurar
+        </button>
+      )}
       {invalidDate && (
         <p className="validDate">Data inválida, formato aceito (DD-MM-AAAA)</p>
       )}
       {info.editDate && <p className="editDate">{info.editDate}</p>}
+      {info.share && (
+        <p className="homeShare">
+          Compartihado com <span className="homeShareSpan">{info.share}</span>
+        </p>
+      )}
     </div>
   );
 };

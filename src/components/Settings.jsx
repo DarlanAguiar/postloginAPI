@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 
 import { applyTheme } from "../settingsFunctions/settingsFunction";
-import { FaWindowClose } from "react-icons/fa";
+import { FaWindowClose, FaTrashRestore } from "react-icons/fa";
 
 import { AuthContexts } from "../contexts/contexts";
 
@@ -13,6 +13,10 @@ function Settings({
   numberMessageOf,
   importMessagesIndexedBD,
   organizeBySettings,
+  setInfoDB,
+  deletedPosts,
+  setViewDeletdPost,
+  clearTrash,
 }) {
   const { userEmail, setTheme, organization } = useContext(AuthContexts);
 
@@ -25,6 +29,12 @@ function Settings({
     };
 
     applyTheme(theme, configuration);
+  };
+
+  const viewDeletedPost = () => {
+    setInfoDB(deletedPosts);
+    setViewDeletdPost(true);
+    handleShowSettings();
   };
 
   return (
@@ -77,10 +87,30 @@ function Settings({
         </button>
       </div>
       <hr />
+      <h3 className="settingsTrashTitle">
+        {" "}
+        <FaTrashRestore /> Lixeira{" "}
+      </h3>
+
+      <div className="settingsTrashButtons">
+        <button onClick={() => viewDeletedPost()}>
+          {deletedPosts.length > 0
+            ? `Visualizar ${deletedPosts.length} Post${
+                deletedPosts.length > 1 ? "s" : ""
+              }`
+            : `Lixeira vazia`}
+        </button>
+
+        {deletedPosts.length > 0 && (
+          <button onClick={() => clearTrash()}>Esvaziar lixeira</button>
+        )}
+      </div>
+
+      <hr />
       {numberMessageOf > 0 ? (
         <div>
           <p className="settingsQtdPostOff">
-            Você Possui {numberMessageOf} Post{numberMessageOf > 1 ? "s" : ""}{" "}
+            Você Possui {numberMessageOf} Post{numberMessageOf > 1 ? "s" : ""}
             no modo OFFLINE
           </p>
 

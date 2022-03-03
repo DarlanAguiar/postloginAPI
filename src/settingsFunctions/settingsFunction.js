@@ -1,21 +1,18 @@
-
 import {
   salvarConfigs,
-  updateConfigs, getConfigs
+  updateConfigs,
+  getConfigs,
 } from "../database/stylesSettingsOnFirebase";
 
 let userConfigurationInformation = {};
 
 const saveConfigs = async () => {
-  console.log(userConfigurationInformation);
-
-  if (userConfigurationInformation.id === undefined ) {
+  if (userConfigurationInformation.id === undefined) {
     await salvarConfigs(userConfigurationInformation);
 
     userConfigurationInformation = await getConfigs(
       userConfigurationInformation.user
     );
-    
   } else {
     updateConfigs(userConfigurationInformation);
   }
@@ -26,8 +23,8 @@ export const organizeByScheme = (data, scheme, userConfiguration) => {
   userConfigurationInformation.organization = userConfiguration.organization;
   userConfigurationInformation.user = userConfiguration.user;
 
-  if(userConfiguration.id){
-    userConfigurationInformation.id = userConfiguration.id
+  if (userConfiguration.id) {
+    userConfigurationInformation.id = userConfiguration.id;
   }
 
   applyTheme(userConfiguration.theme, userConfiguration);
@@ -68,44 +65,14 @@ const organizeByChecks = (data) => {
 };
 
 const organizedByDate = (data) => {
-  const arr = [];
-  data.forEach((dataU) => {
-    const x = {
-      title: dataU.title,
-      date: dataU.date
-        ? new Date(dataU.date.split("-").reverse().join(","))
-        : new Date(),
-      id: dataU.id,
-      message: dataU.message,
-      checkList: dataU.checkList,
-      editDate: dataU.editDate,
-    };
+  data.sort(function (a, b) {
+    const convertDate = (d) =>
+      d ? new Date(d.split("-").reverse().join(",")) : new Date();
 
-    arr.push(x);
+    return convertDate(a.date).getTime() - convertDate(b.date).getTime();
   });
 
-  arr.sort(function (a, b) {
-    // const convertDate = (d) =>  d
-    //    ? new Date(d.split("-").reverse().join(","))
-    //    : new Date()
-    // return convertDate(a.date).getTime() - convertDate(b.date).getTime();
-    return a.date.getTime() - b.date.getTime();
-  });
-
-  arr.map((id) => {
-    if (id.date.getMilliseconds() > 0 && id.date.getSeconds() > 0) {
-      id.date = "";
-      return id;
-    }
-    const dia = String(id.date.getDate()).padStart(2, "0");
-    const mes = String(id.date.getMonth() + 1).padStart(2, "0");
-    const ano = id.date.getFullYear();
-
-    id.date = `${dia}-${mes}-${ano}`;
-    return id;
-  });
-
-  return arr;
+  return data.map((element) => element);
 };
 
 //theme
@@ -136,7 +103,7 @@ export const applyTheme = (theme, userConfiguration) => {
     themeStyle.setProperty("--colorBackgroundLine", "rgb(220, 240, 240)");
     themeStyle.setProperty("--colorFontDisabled", "#999");
   } else if (theme === "darkPink") {
-    themeStyle.setProperty("--colorBackground", "#d84797");
+    themeStyle.setProperty("--colorBackground", "#BB7395");
     themeStyle.setProperty("--colorBackgroundCard", "#d4b2d8");
     themeStyle.setProperty("--colorFontPrimary", "#190e4f");
     themeStyle.setProperty("--colorFontSecondary", "#826cf");
