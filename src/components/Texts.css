@@ -6,14 +6,14 @@
 }
 .titleTexts{
   flex: 1;
-  font-size: 1em;
+  font-size: .81em;
   text-align: center;
   overflow: hidden;
   color: var(--colorFontPrimary);
 }
 
 .textContent{
-  font-size: 1em;
+  font-size: .88em;
   text-align: center;
   padding: 5px 0;
 }

@@ -175,7 +175,7 @@ function Home() {
 
   const clearTrash = () => {
     deletedPosts.forEach((post) => {
-      deletePost(post.id);
+      deletePost(post.id, post);
     });
   };
 

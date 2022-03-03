@@ -16,8 +16,8 @@ export const firebaseApp = initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 
-const URL = "/post";
-//const URL = "http://localhost:3000/post";
+//const URL = "/post";
+const URL = "http://localhost:3000/post";
 
 export const salvarDados = async (data, userDB, token) => {
   let message = {};
