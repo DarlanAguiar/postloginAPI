@@ -1,2 +1,2 @@
-# postloginAPI
- postIT (Lista de tarefas) com API REST e login.
+# Todo-list
+ postIT (Lista de tarefas) com API REST, login, lixeira, undo, compartilhameto.
