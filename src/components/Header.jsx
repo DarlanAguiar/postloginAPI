@@ -76,7 +76,7 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
 
     if (userEmail) {
       let addData;
-      if (emailShare.length > 15) {
+      if (emailShare.length > 10) {
         data.share = emailShare;
         addData = await saveSharedPost(data);
       } else {
@@ -84,7 +84,7 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
         addData = await salvarDados(data, userEmail, token);
       }
 
-      if (addData.error) {
+      if (addData?.error) {
         setShowModalError(true);
         console.error(addData.error);
       }
@@ -100,7 +100,7 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
   };
 
   const saveSharedPost = async (data) => {
-    await addSharePost(userEmail, data);
+    await addSharePost(userEmail, data, token);
   };
 
   return (
@@ -168,7 +168,7 @@ const Header = ({ show, setShow, fetchPostIts, setShowModalError }) => {
               type="text"
               value={emailShare}
               onChange={(e) => {
-                setEmailShare(e.target.value);
+                setEmailShare(e.target.value.toLocaleLowerCase());
                 validateEmail(e.target.value);
               }}
             />

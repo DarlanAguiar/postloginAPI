@@ -8,8 +8,10 @@ const {
   addDoc,
   deleteDoc,
   updateDoc,
+  setDoc,
 } = require("firebase/firestore");
 //const { getAuth } = require("firebase/auth");
+const { v4 } = require("uuid");
 
 const router = require("express").Router();
 
@@ -103,6 +105,36 @@ router.post("/post", async (req, res) => {
   }
 });
 
+router.post("/post/share", async (req, res) => {
+  const { data, userDB, token } = req.body;
+  const validated = await validateToken(userDB, token);
+  const id = v4();
+
+  console.log(v4());
+  console.log(data);
+  console.log(userDB);
+  console.log(token);
+
+  if (validated) {
+    try {
+      await setDoc(doc(db, userDB, id), data);
+
+      const userShared = data.share;
+      data.share = userDB;
+
+      await setDoc(doc(db, userShared, id), data);
+
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.status(201).json({ message: "Iserido com sucesso" });
+    } catch (err) {
+      res.status(500).json({ error: "Erro interno do servidor (POST)" });
+      console.error(err);
+    }
+  } else {
+    res.status(500).json({ error: "Token de usuario invalido" });
+  }
+});
+
 router.patch("/post", async (req, res) => {
   const { data, userDB, token } = req.body;
   const id = data.id;
@@ -142,7 +174,6 @@ router.delete("/post", async (req, res) => {
     if (data.share) {
       const userShare = data.share;
       await deleteDoc(doc(db, userShare, id));
-     
     }
 
     try {

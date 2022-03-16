@@ -16,8 +16,8 @@ export const firebaseApp = initializeApp(firebaseConfig);
 
 export const db = getFirestore();
 
-const URL = "/post";
-//const URL = "http://localhost:3000/post";
+//const URL = "/post";
+const URL = "http://localhost:3000/post";
 
 export const salvarDados = async (data, userDB, token) => {
   let message = {};
@@ -32,7 +32,7 @@ export const salvarDados = async (data, userDB, token) => {
   })
     .then((resp) => resp.json())
     .then((resp) => {
-      console.log(resp);
+  
       if (resp.error) {
         message = { error: resp.error };
       }
@@ -110,7 +110,31 @@ export const updateData = async (data, userDB, token) => {
   return message;
 };
 
-export const addSharePost = async (userLocal, data) => {
+export const addSharePost = async (userDB, data, token) => {
+  
+  let message = {};
+
+  await fetch(`${URL}/share`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    },
+    body: JSON.stringify({ data: data, userDB: userDB, token: token }),
+  })
+    .then((resp) => resp.json())
+    .then((resp) => {
+  
+      if (resp.error) {
+        message = { error: resp.error };
+      }
+    });
+  return message;
+  
+  
+  
+/*   
+  
   const id = uuidv4();
   const userShared = data.share;
 
@@ -119,4 +143,8 @@ export const addSharePost = async (userLocal, data) => {
   data.share = userLocal;
 
   await setDoc(doc(db, userShared, id), data);
+
+
+ */
+
 };
