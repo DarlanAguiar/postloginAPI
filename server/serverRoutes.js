@@ -168,9 +168,9 @@ router.delete("/post", async (req, res) => {
   const { id, userDB, token, data } = req.body;
   const validated = await validateToken(userDB, token);
 
-  await deleteDoc(doc(db, userDB, id));
-
+  
   if (validated) {
+    await deleteDoc(doc(db, userDB, id));
     if (data.share) {
       const userShare = data.share;
       await deleteDoc(doc(db, userShare, id));
